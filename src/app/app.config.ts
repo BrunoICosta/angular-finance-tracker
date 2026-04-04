@@ -13,6 +13,8 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
+import { FinanceRepository } from './core/storage/finance-repository';
+import { LocalStorageFinanceRepository } from './core/storage/local-storage-finance.repository';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -21,6 +23,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideRouter(routes),
+    { provide: FinanceRepository, useClass: LocalStorageFinanceRepository },
     { provide: LOCALE_ID, useValue: 'pt-BR' },
     { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' },
     provideAppInitializer(() => {
