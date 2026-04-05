@@ -8,6 +8,8 @@ import {
   TransactionDraft,
   emptyFinanceData,
 } from '../models';
+import { DEFAULT_CATEGORIES } from '../data/default-categories';
+import { createDemoData } from '../data/demo-data';
 import { FinanceRepository } from '../storage/finance-repository';
 import { createId } from '../utils/id';
 
@@ -77,7 +79,8 @@ export class FinanceStore {
     this._loadError.set(null);
     try {
       const saved = await this.repository.load();
-      this.data.set(saved ?? emptyFinanceData());
+      // First run: nothing saved yet, so seed demo data to make the app explorable.
+      this.data.set(saved ?? createDemoData());
       this._status.set('ready');
     } catch (error) {
       this._loadError.set(error instanceof Error ? error.message : String(error));
@@ -89,6 +92,16 @@ export class FinanceStore {
   async reset(): Promise<void> {
     await this.repository.clear();
     await this.load();
+  }
+
+  /** Removes every transaction and budget, keeping only the default categories. */
+  clearAll(): void {
+    this.data.set(emptyFinanceData([...DEFAULT_CATEGORIES]));
+  }
+
+  /** Replaces everything with a fresh set of demo data. */
+  restoreDemo(): void {
+    this.data.set(createDemoData());
   }
 
   // Transactions
