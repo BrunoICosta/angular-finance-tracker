@@ -1,20 +1,25 @@
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
 import { appConfig } from './app.config';
+import { FinanceRepository } from './core/storage/finance-repository';
+import { InMemoryFinanceRepository } from './core/storage/in-memory-finance.repository';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: appConfig.providers,
+      providers: [
+        ...appConfig.providers,
+        { provide: FinanceRepository, useValue: new InMemoryFinanceRepository() },
+      ],
     }).compileComponents();
   });
 
-  it('formats currency using the pt-BR locale', async () => {
+  it('renders the shell with brand and navigation', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
-    const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
-    expect(text).toContain('R$');
-    expect(text).toContain('1.234,50');
+    const element = fixture.nativeElement as HTMLElement;
+    expect(element.querySelector('.brand__name')?.textContent).toContain('Finanças');
+    expect(element.querySelectorAll('mat-nav-list a').length).toBeGreaterThan(0);
   });
 });

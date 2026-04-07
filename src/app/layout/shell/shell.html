@@ -1,0 +1,87 @@
+<a class="skip-link" href="#main-content">Pular para o conteúdo</a>
+
+<mat-sidenav-container class="shell">
+  <mat-sidenav
+    #drawer
+    class="shell__nav"
+    [mode]="isHandset() ? 'over' : 'side'"
+    [opened]="!isHandset()"
+    [fixedInViewport]="isHandset()"
+    [attr.role]="isHandset() ? 'dialog' : 'navigation'"
+    aria-label="Menu principal"
+  >
+    <div class="brand">
+      <span class="brand__logo" aria-hidden="true">
+        <mat-icon>account_balance_wallet</mat-icon>
+      </span>
+      <span class="brand__name">Finanças</span>
+    </div>
+
+    <mat-nav-list>
+      @for (item of navItems; track item.path) {
+        <a
+          mat-list-item
+          [routerLink]="item.path"
+          routerLinkActive
+          #rla="routerLinkActive"
+          [activated]="rla.isActive"
+          [attr.aria-current]="rla.isActive ? 'page' : null"
+          (click)="onNavigate()"
+        >
+          <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+          <span matListItemTitle>{{ item.label }}</span>
+        </a>
+      }
+    </mat-nav-list>
+
+    <p class="shell__footnote">Dados salvos apenas neste navegador.</p>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="shell__content">
+    <mat-toolbar class="topbar">
+      @if (isHandset()) {
+        <button mat-icon-button type="button" aria-label="Abrir menu" (click)="drawer.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <span class="topbar__title">Finanças</span>
+      }
+      <span class="topbar__spacer"></span>
+      <button
+        mat-icon-button
+        type="button"
+        (click)="theme.toggle()"
+        [attr.aria-label]="theme.isDark() ? 'Ativar tema claro' : 'Ativar tema escuro'"
+        [matTooltip]="theme.isDark() ? 'Tema claro' : 'Tema escuro'"
+      >
+        <mat-icon>{{ theme.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <main id="main-content" class="page" tabindex="-1">
+      @switch (store.status()) {
+        @case ('loading') {
+          <div class="state" role="status">
+            <mat-spinner diameter="40" />
+            <p>Carregando seus dados…</p>
+          </div>
+        }
+        @case ('error') {
+          <div class="state state--error" role="alert">
+            <mat-icon class="state__icon">error</mat-icon>
+            <h1>Não foi possível carregar seus dados</h1>
+            <p>{{ store.loadError() }}</p>
+            <div class="state__actions">
+              <button mat-flat-button type="button" (click)="store.load()">Tentar novamente</button>
+              <button mat-stroked-button type="button" (click)="store.reset()">
+                Redefinir dados
+              </button>
+            </div>
+          </div>
+        }
+        @default {
+          <router-outlet />
+        }
+      }
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

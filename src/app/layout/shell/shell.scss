@@ -1,0 +1,140 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 1000;
+  padding: 8px 16px;
+  border-radius: var(--app-radius-sm);
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  transform: translateY(-200%);
+  transition: transform 150ms ease;
+
+  &:focus {
+    transform: translateY(0);
+  }
+}
+
+.shell {
+  height: 100%;
+  background: transparent;
+}
+
+.shell__nav {
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  border-right: 1px solid var(--app-border);
+  background: var(--mat-sys-surface-container-lowest);
+  --mat-sidenav-container-shape: 0;
+  --mat-list-active-indicator-shape: 12px;
+
+  ::ng-deep .mat-drawer-inner-container {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 12px 20px;
+}
+
+.brand__logo {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    var(--mat-sys-primary),
+    color-mix(in srgb, var(--mat-sys-tertiary) 70%, var(--mat-sys-primary))
+  );
+  color: var(--mat-sys-on-primary);
+}
+
+.brand__name {
+  font: var(--mat-sys-title-large);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.shell__footnote {
+  margin: auto 12px 8px;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-small);
+}
+
+.shell__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  gap: 8px;
+  background: color-mix(in srgb, var(--mat-sys-surface-container-low) 85%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.topbar__title {
+  font: var(--mat-sys-title-medium);
+  font-weight: 600;
+}
+
+.topbar__spacer {
+  flex: 1;
+}
+
+.page {
+  width: 100%;
+  max-width: var(--app-page-max);
+  margin: 0 auto;
+  padding: 8px 16px 48px;
+  outline: none;
+
+  @media (min-width: 600px) {
+    padding: 8px 24px 48px;
+  }
+}
+
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 96px 16px;
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant);
+
+  h1 {
+    margin: 0;
+    font: var(--mat-sys-title-large);
+    color: var(--mat-sys-on-surface);
+  }
+}
+
+.state__icon {
+  width: 48px;
+  height: 48px;
+  font-size: 48px;
+  color: var(--mat-sys-error);
+}
+
+.state__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
