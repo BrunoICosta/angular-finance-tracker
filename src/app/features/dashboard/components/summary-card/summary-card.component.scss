@@ -1,0 +1,70 @@
+:host {
+  --tone: var(--mat-sys-primary);
+  --tone-container: var(--mat-sys-primary-container);
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius);
+  background: var(--app-card);
+}
+
+:host(.card--income) {
+  --tone: var(--app-income);
+  --tone-container: var(--app-income-container);
+}
+
+:host(.card--expense) {
+  --tone: var(--app-expense);
+  --tone-container: var(--app-expense-container);
+}
+
+:host(.card--balance) {
+  background: linear-gradient(
+    140deg,
+    var(--mat-sys-primary-container),
+    color-mix(in srgb, var(--mat-sys-tertiary-container) 55%, var(--app-card))
+  );
+  border-color: transparent;
+}
+
+.card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card__label {
+  font: var(--mat-sys-label-large);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.card__icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--tone-container);
+  color: var(--tone);
+}
+
+.card__value {
+  margin: 0;
+  font: var(--mat-sys-headline-medium);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.card__value--negative {
+  color: var(--app-expense);
+}
+
+.card__hint {
+  margin: 0;
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface-variant);
+}

@@ -1,0 +1,42 @@
+<app-page-header title="Visão geral" subtitle="Seu mês em um relance">
+  <app-month-navigator actions />
+</app-page-header>
+
+<section class="summary" aria-label="Resumo do mês">
+  <app-summary-card
+    label="Saldo do mês"
+    tone="balance"
+    [valueCents]="summary().balanceCents"
+    [hint]="balanceHint()"
+  />
+  <app-summary-card
+    label="Receitas"
+    tone="income"
+    [valueCents]="summary().incomeCents"
+    [hint]="incomeHint()"
+  />
+  <app-summary-card
+    label="Despesas"
+    tone="expense"
+    [valueCents]="summary().expenseCents"
+    [hint]="expenseHint()"
+  />
+</section>
+
+<div class="grid">
+  <section class="panel panel--recent" aria-labelledby="recent-title">
+    <header class="panel__header">
+      <h2 id="recent-title" class="panel__title">Últimas transações</h2>
+      <a mat-button routerLink="/transacoes">Ver todas</a>
+    </header>
+    @if (recent().length) {
+      <app-recent-transactions [transactions]="recent()" />
+    } @else {
+      <app-empty-state
+        icon="receipt_long"
+        title="Nenhuma transação neste mês"
+        message="Registre receitas e despesas para acompanhar seu saldo."
+      />
+    }
+  </section>
+</div>

@@ -147,3 +147,11 @@ export function budgetProgress(
   }
   return result.sort((a, b) => b.ratio - a.ratio);
 }
+
+/** Relative change from `previous` to `current` (0.1 = +10%), or `null` when there is no base. */
+export function percentChange(current: number, previous: number): number | null {
+  if (previous === 0) {
+    return null;
+  }
+  return (current - previous) / previous;
+}
