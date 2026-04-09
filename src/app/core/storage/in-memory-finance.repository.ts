@@ -1,5 +1,5 @@
 import { FinanceData } from '../models';
-import { FinanceRepository } from './finance-repository';
+import { FinanceRepository } from './finance.repository';
 
 /** Volatile implementation, used by unit tests and handy for prototyping. */
 export class InMemoryFinanceRepository extends FinanceRepository {

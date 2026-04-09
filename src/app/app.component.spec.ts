@@ -1,24 +1,23 @@
 import { TestBed } from '@angular/core/testing';
-import { App } from './app';
+import { RouterTestingHarness } from '@angular/router/testing';
 import { appConfig } from './app.config';
-import { FinanceRepository } from './core/storage/finance-repository';
+import { FinanceRepository } from './core/storage/finance.repository';
 import { InMemoryFinanceRepository } from './core/storage/in-memory-finance.repository';
 
-describe('App', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [App],
+describe('AppComponent', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       providers: [
         ...appConfig.providers,
         { provide: FinanceRepository, useValue: new InMemoryFinanceRepository() },
       ],
-    }).compileComponents();
+    });
   });
 
   it('renders the shell with brand and navigation', async () => {
-    const fixture = TestBed.createComponent(App);
-    await fixture.whenStable();
-    const element = fixture.nativeElement as HTMLElement;
+    const harness = await RouterTestingHarness.create('/');
+    await harness.fixture.whenStable();
+    const element = harness.routeNativeElement?.ownerDocument.body ?? document.body;
     expect(element.querySelector('.brand__name')?.textContent).toContain('Finanças');
     expect(element.querySelectorAll('mat-nav-list a').length).toBeGreaterThan(0);
   });

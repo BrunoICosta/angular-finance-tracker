@@ -11,8 +11,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { map } from 'rxjs';
-import { ThemeService } from '../../core/services/theme.service';
-import { FinanceStore } from '../../core/state/finance.store';
+import { ThemeService } from '../../services/theme.service';
+import { FinanceStore } from '../../state/finance.store';
 import { NAV_ITEMS } from '../nav-items';
 
 @Component({
@@ -29,11 +29,11 @@ import { NAV_ITEMS } from '../nav-items';
     MatTooltipModule,
     MatProgressSpinnerModule,
   ],
-  templateUrl: './shell.html',
-  styleUrl: './shell.scss',
+  templateUrl: './shell.component.html',
+  styleUrl: './shell.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Shell {
+export class ShellComponent {
   protected readonly store = inject(FinanceStore);
   protected readonly theme = inject(ThemeService);
   protected readonly navItems = NAV_ITEMS;

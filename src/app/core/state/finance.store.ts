@@ -10,8 +10,8 @@ import {
 } from '../models';
 import { DEFAULT_CATEGORIES } from '../data/default-categories';
 import { createDemoData } from '../data/demo-data';
-import { FinanceRepository } from '../storage/finance-repository';
-import { createId } from '../utils/id';
+import { FinanceRepository } from '../storage/finance.repository';
+import { createId } from '../../shared/utils/id';
 
 export type LoadStatus = 'loading' | 'ready' | 'error';
 

@@ -42,7 +42,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageHeader {
+export class PageHeaderComponent {
   readonly title = input.required<string>();
   readonly subtitle = input<string>();
 }

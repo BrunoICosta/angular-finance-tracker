@@ -1,5 +1,5 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { MonthKey, addMonths, currentMonthKey, monthStart } from '../utils/month';
+import { MonthKey, addMonths, currentMonthKey, monthStart } from '../../shared/utils/month';
 
 /** The month the person is looking at, shared by the dashboard, transactions and budgets. */
 @Injectable({ providedIn: 'root' })

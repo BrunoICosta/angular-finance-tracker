@@ -1,6 +1,6 @@
 import { Budget, FINANCE_DATA_VERSION, FinanceData, Transaction, TransactionType } from '../models';
-import { toCents } from '../utils/money';
-import { MonthKey, lastMonths, toMonthKey } from '../utils/month';
+import { toCents } from '../../shared/utils/money';
+import { MonthKey, lastMonths, toMonthKey } from '../../shared/utils/month';
 import { DEFAULT_CATEGORIES } from './default-categories';
 
 /** Number of months covered by the demo data, ending at the current month. */

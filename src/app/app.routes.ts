@@ -1,11 +1,19 @@
 import { Routes } from '@angular/router';
+import { ShellComponent } from './core/layout/shell/shell.component';
 
+/** The shell is the only eager piece; every feature is a lazy chunk. */
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
   {
-    path: 'dashboard',
-    title: 'Visão geral · Finanças',
-    loadComponent: () => import('./features/dashboard/dashboard-page').then((m) => m.DashboardPage),
+    path: '',
+    component: ShellComponent,
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+      {
+        path: 'dashboard',
+        loadChildren: () =>
+          import('./features/dashboard/dashboard.routes').then((m) => m.DASHBOARD_ROUTES),
+      },
+      { path: '**', redirectTo: 'dashboard' },
+    ],
   },
-  { path: '**', redirectTo: 'dashboard' },
 ];

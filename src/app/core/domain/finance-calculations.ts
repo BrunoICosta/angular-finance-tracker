@@ -1,5 +1,5 @@
 import { Budget, Category, Transaction } from '../models';
-import { MonthKey, lastMonths, monthKeyOf } from './month';
+import { MonthKey, lastMonths, monthKeyOf } from '../../shared/utils/month';
 
 export interface MonthSummary {
   readonly incomeCents: number;

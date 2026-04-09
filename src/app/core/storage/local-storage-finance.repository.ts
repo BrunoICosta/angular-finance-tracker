@@ -1,6 +1,6 @@
 import { Injectable, InjectionToken, inject } from '@angular/core';
 import { FINANCE_DATA_VERSION, FinanceData } from '../models';
-import { FinanceDataCorruptedError, FinanceRepository } from './finance-repository';
+import { FinanceDataCorruptedError, FinanceRepository } from './finance.repository';
 
 export const FINANCE_STORAGE_KEY = 'finance-tracker:data';
 
