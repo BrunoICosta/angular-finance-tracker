@@ -1,0 +1,52 @@
+<div class="filters" role="search" aria-label="Filtrar transações">
+  <mat-form-field appearance="outline" class="filters__search" subscriptSizing="dynamic">
+    <mat-label>Buscar</mat-label>
+    <mat-icon matPrefix>search</mat-icon>
+    <input
+      #searchInput
+      matInput
+      type="search"
+      autocomplete="off"
+      placeholder="Descrição, observação ou categoria"
+      [value]="filters().search"
+      (input)="setSearch(searchInput.value)"
+    />
+  </mat-form-field>
+
+  <mat-button-toggle-group
+    class="filters__type"
+    aria-label="Tipo"
+    hideSingleSelectionIndicator
+    [value]="filters().type"
+    (change)="setType($event.value)"
+  >
+    <mat-button-toggle value="all">Todas</mat-button-toggle>
+    <mat-button-toggle value="income">Receitas</mat-button-toggle>
+    <mat-button-toggle value="expense">Despesas</mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <mat-form-field appearance="outline" class="filters__category" subscriptSizing="dynamic">
+    <mat-label>Categoria</mat-label>
+    <mat-select [value]="filters().categoryId" (valueChange)="setCategory($event)">
+      <mat-option value="all">Todas as categorias</mat-option>
+      @for (category of visibleCategories(); track category.id) {
+        <mat-option [value]="category.id">{{ category.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <div class="filters__footer">
+    <mat-slide-toggle
+      [checked]="!filters().onlySelectedMonth"
+      (change)="setOnlySelectedMonth(!$event.checked)"
+    >
+      Todo o período
+    </mat-slide-toggle>
+    @if (canClear()) {
+      <button mat-button type="button" (click)="clear()">
+        <mat-icon>filter_alt_off</mat-icon>
+        Limpar filtros
+      </button>
+    }
+  </div>
+</div>

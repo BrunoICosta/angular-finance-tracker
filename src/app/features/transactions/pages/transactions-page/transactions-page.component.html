@@ -1,24 +1,71 @@
-<app-page-header title="Transações" subtitle="Receitas e despesas do mês">
-  <app-month-navigator actions />
+<app-page-header title="Transações" subtitle="Filtre, ordene e edite suas movimentações">
+  @if (filters().onlySelectedMonth) {
+    <app-month-navigator actions />
+  }
   <button mat-flat-button type="button" actions (click)="dialogs.create()">
     <mat-icon>add</mat-icon>
     Nova transação
   </button>
 </app-page-header>
 
-<section class="panel" aria-label="Transações">
-  @if (rows().length) {
+<section class="panel panel--filters" aria-label="Filtros">
+  <app-transaction-filters [(filters)]="filters" [categories]="store.categories()" />
+</section>
+
+<section class="panel" aria-labelledby="results-title">
+  <header class="results">
+    <h2 id="results-title" class="results__title" aria-live="polite">
+      {{ filtered().length }} {{ filtered().length === 1 ? 'transação' : 'transações' }}
+    </h2>
+    @if (filtered().length) {
+      <dl class="results__totals">
+        <div>
+          <dt>Receitas</dt>
+          <dd class="text-income tabular">{{ totals().incomeCents | brl }}</dd>
+        </div>
+        <div>
+          <dt>Despesas</dt>
+          <dd class="text-expense tabular">{{ totals().expenseCents | brl }}</dd>
+        </div>
+        <div>
+          <dt>Saldo</dt>
+          <dd class="tabular">{{ totals().balanceCents | brl }}</dd>
+        </div>
+      </dl>
+    }
+  </header>
+
+  @if (page().length) {
     <app-transactions-table
-      [transactions]="rows()"
+      [transactions]="page()"
       [categoryById]="store.categoryById()"
       [compact]="isHandset()"
+      [sort]="sort()"
+      (sortChange)="sort.set($event)"
       (edit)="dialogs.edit($event)"
       (remove)="dialogs.remove($event)"
     />
+    <mat-paginator
+      [length]="filtered().length"
+      [pageIndex]="pageIndex()"
+      [pageSize]="pageSize()"
+      [pageSizeOptions]="pageSizeOptions"
+      [hidePageSize]="isHandset()"
+      (page)="onPage($event)"
+      aria-label="Paginação das transações"
+    />
+  } @else if (isFiltering()) {
+    <app-empty-state
+      icon="search_off"
+      title="Nada encontrado"
+      message="Nenhuma transação corresponde aos filtros aplicados."
+    >
+      <button mat-stroked-button type="button" (click)="clearFilters()">Limpar filtros</button>
+    </app-empty-state>
   } @else {
     <app-empty-state
       icon="receipt_long"
-      title="Nenhuma transação neste mês"
+      title="Nenhuma transação por aqui"
       message="Adicione sua primeira receita ou despesa."
     >
       <button mat-stroked-button type="button" (click)="dialogs.create()">
