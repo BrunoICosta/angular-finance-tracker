@@ -1,0 +1,99 @@
+<div class="table-wrapper">
+  <table mat-table [dataSource]="transactions()" class="table">
+    <caption class="visually-hidden">
+      Lista de transações
+    </caption>
+
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>Data</th>
+      <td mat-cell *matCellDef="let row" class="tabular">
+        {{ row.date | isoDate | date: 'dd/MM/yyyy' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef>Descrição</th>
+      <td mat-cell *matCellDef="let row">
+        @let category = categoryById().get(row.categoryId);
+        <div class="description">
+          @if (compact()) {
+            <app-category-icon
+              [icon]="category?.icon ?? 'help'"
+              [color]="category?.color ?? '#7b8794'"
+              [size]="32"
+            />
+          }
+          <div class="description__text">
+            <span class="description__title">{{ row.description }}</span>
+            @if (compact()) {
+              <span class="description__meta"
+                >{{ category?.name ?? 'Sem categoria' }} ·
+                {{ row.date | isoDate | date: 'dd/MM' }}</span
+              >
+            } @else if (row.notes) {
+              <span class="description__meta">{{ row.notes }}</span>
+            }
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef>Categoria</th>
+      <td mat-cell *matCellDef="let row">
+        @let category = categoryById().get(row.categoryId);
+        <span class="chip" [style.--category-color]="category?.color ?? '#7b8794'">
+          <app-category-icon
+            [icon]="category?.icon ?? 'help'"
+            [color]="category?.color ?? '#7b8794'"
+            [size]="24"
+          />
+          {{ category?.name ?? 'Sem categoria' }}
+        </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef class="amount">Valor</th>
+      <td
+        mat-cell
+        *matCellDef="let row"
+        class="amount tabular"
+        [class.text-income]="row.type === 'income'"
+        [class.text-expense]="row.type === 'expense'"
+      >
+        <span class="visually-hidden">{{ row.type === 'income' ? 'Receita' : 'Despesa' }}</span>
+        {{ row.type === 'income' ? '+' : '−' }} {{ row.amountCents | brl }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef class="actions">
+        <span class="visually-hidden">Ações</span>
+      </th>
+      <td mat-cell *matCellDef="let row" class="actions">
+        <button
+          mat-icon-button
+          type="button"
+          [matMenuTriggerFor]="menu"
+          [attr.aria-label]="'Ações para ' + row.description"
+        >
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu" xPosition="before">
+          <button mat-menu-item type="button" (click)="edit.emit(row)">
+            <mat-icon>edit</mat-icon>
+            <span>Editar</span>
+          </button>
+          <button mat-menu-item type="button" (click)="remove.emit(row)">
+            <mat-icon>delete</mat-icon>
+            <span>Excluir</span>
+          </button>
+        </mat-menu>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns()"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns()"></tr>
+  </table>
+</div>

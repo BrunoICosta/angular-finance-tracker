@@ -1,0 +1,30 @@
+<app-page-header title="Transações" subtitle="Receitas e despesas do mês">
+  <app-month-navigator actions />
+  <button mat-flat-button type="button" actions (click)="dialogs.create()">
+    <mat-icon>add</mat-icon>
+    Nova transação
+  </button>
+</app-page-header>
+
+<section class="panel" aria-label="Transações">
+  @if (rows().length) {
+    <app-transactions-table
+      [transactions]="rows()"
+      [categoryById]="store.categoryById()"
+      [compact]="isHandset()"
+      (edit)="dialogs.edit($event)"
+      (remove)="dialogs.remove($event)"
+    />
+  } @else {
+    <app-empty-state
+      icon="receipt_long"
+      title="Nenhuma transação neste mês"
+      message="Adicione sua primeira receita ou despesa."
+    >
+      <button mat-stroked-button type="button" (click)="dialogs.create()">
+        <mat-icon>add</mat-icon>
+        Nova transação
+      </button>
+    </app-empty-state>
+  }
+</section>

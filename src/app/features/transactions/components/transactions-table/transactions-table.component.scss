@@ -1,0 +1,60 @@
+:host {
+  display: block;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  background: transparent;
+  --mat-table-row-item-outline-color: var(--app-border);
+}
+
+.description {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.description__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.description__title {
+  font-weight: 500;
+}
+
+.description__meta {
+  overflow: hidden;
+  max-width: 32ch;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-small);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px 2px 2px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--category-color) 10%, transparent);
+  white-space: nowrap;
+}
+
+.amount {
+  text-align: right;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.actions {
+  width: 56px;
+  text-align: right;
+}

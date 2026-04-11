@@ -13,6 +13,11 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/dashboard/dashboard.routes').then((m) => m.DASHBOARD_ROUTES),
       },
+      {
+        path: 'transacoes',
+        loadChildren: () =>
+          import('./features/transactions/transactions.routes').then((m) => m.TRANSACTIONS_ROUTES),
+      },
       { path: '**', redirectTo: 'dashboard' },
     ],
   },

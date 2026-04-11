@@ -1,0 +1,45 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px !important;
+}
+
+.type-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 16px;
+
+  mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    vertical-align: middle;
+  }
+}
+
+.type-toggle__expense.mat-button-toggle-checked {
+  background: var(--app-expense-container);
+  color: var(--app-expense);
+}
+
+.type-toggle__income.mat-button-toggle-checked {
+  background: var(--app-income-container);
+  color: var(--app-income);
+}
+
+.row {
+  display: grid;
+  gap: 0 12px;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 480px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.option {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}

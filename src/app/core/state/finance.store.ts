@@ -130,6 +130,14 @@ export class FinanceStore {
     });
   }
 
+  /** Puts back a previously removed transaction (undo). */
+  restoreTransaction(transaction: Transaction): void {
+    if (this.transactions().some((existing) => existing.id === transaction.id)) {
+      return;
+    }
+    this.patch({ transactions: [transaction, ...this.transactions()] });
+  }
+
   // Categories
 
   addCategory(draft: CategoryDraft): Category {
