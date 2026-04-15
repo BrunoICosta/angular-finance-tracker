@@ -1,0 +1,87 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Editar categoria' : 'Nova categoria' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <mat-dialog-content class="form">
+    <div class="preview" aria-hidden="true">
+      <app-category-icon
+        [icon]="preview().icon ?? 'more_horiz'"
+        [color]="preview().color ?? '#7b8794'"
+        [size]="48"
+      />
+      <span class="preview__name">{{ preview().name || 'Nome da categoria' }}</span>
+    </div>
+
+    <mat-button-toggle-group
+      class="type-toggle"
+      formControlName="type"
+      aria-label="Tipo da categoria"
+      hideSingleSelectionIndicator
+    >
+      <mat-button-toggle value="expense">Despesa</mat-button-toggle>
+      <mat-button-toggle value="income">Receita</mat-button-toggle>
+    </mat-button-toggle-group>
+    @if (typeLocked) {
+      <p class="note">O tipo não pode ser alterado porque a categoria já possui transações.</p>
+    }
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nome</mat-label>
+      <input
+        matInput
+        formControlName="name"
+        autocomplete="off"
+        cdkFocusInitial
+        [maxlength]="nameMax"
+      />
+      @if (form.controls.name.hasError('required')) {
+        <mat-error>Informe um nome.</mat-error>
+      }
+    </mat-form-field>
+    @if (form.hasError('duplicateName')) {
+      <p class="error" role="alert">Já existe uma categoria com esse nome.</p>
+    }
+
+    <fieldset class="picker">
+      <legend>Cor</legend>
+      <div class="swatches">
+        @for (color of colors; track color.value) {
+          <label class="swatch" [style.--swatch]="color.value" [title]="color.label">
+            <input
+              type="radio"
+              formControlName="color"
+              [value]="color.value"
+              [attr.aria-label]="color.label"
+            />
+            <span class="swatch__dot"></span>
+          </label>
+        }
+        <label class="swatch swatch--custom">
+          <input type="color" formControlName="color" aria-label="Cor personalizada" />
+          <mat-icon aria-hidden="true">colorize</mat-icon>
+        </label>
+      </div>
+    </fieldset>
+
+    <fieldset class="picker">
+      <legend>Ícone</legend>
+      <div class="icons">
+        @for (icon of icons; track icon.name) {
+          <label class="icon-option" [title]="icon.label">
+            <input
+              type="radio"
+              formControlName="icon"
+              [value]="icon.name"
+              [attr.aria-label]="icon.label"
+            />
+            <mat-icon aria-hidden="true">{{ icon.name }}</mat-icon>
+          </label>
+        }
+      </div>
+    </fieldset>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" mat-dialog-close>Cancelar</button>
+    <button mat-flat-button type="submit">{{ isEdit ? 'Salvar' : 'Criar categoria' }}</button>
+  </mat-dialog-actions>
+</form>

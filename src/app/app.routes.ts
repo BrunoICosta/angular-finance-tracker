@@ -18,6 +18,11 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/transactions/transactions.routes').then((m) => m.TRANSACTIONS_ROUTES),
       },
+      {
+        path: 'categorias',
+        loadChildren: () =>
+          import('./features/categories/categories.routes').then((m) => m.CATEGORIES_ROUTES),
+      },
       { path: '**', redirectTo: 'dashboard' },
     ],
   },

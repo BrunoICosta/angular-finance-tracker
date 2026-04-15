@@ -17,8 +17,11 @@ import { MatIconModule } from '@angular/material/icon';
       flex: none;
       place-items: center;
       border-radius: 50%;
-      color: var(--category-color);
-      background: color-mix(in srgb, var(--category-color) 16%, transparent);
+      color: light-dark(
+        var(--category-color),
+        color-mix(in srgb, var(--category-color) 65%, white)
+      );
+      background: color-mix(in srgb, var(--category-color) 18%, transparent);
     }
     mat-icon {
       width: 20px;
