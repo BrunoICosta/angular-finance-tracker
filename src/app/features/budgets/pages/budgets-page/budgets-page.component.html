@@ -1,0 +1,61 @@
+<app-page-header title="Orçamentos" subtitle="Limites mensais de gasto por categoria">
+  <app-month-navigator actions />
+</app-page-header>
+
+@if (progress().length) {
+  <section class="overview" aria-label="Resumo dos orçamentos">
+    <div class="overview__text">
+      <span class="overview__label">Gasto nas categorias com orçamento</span>
+      <span class="overview__value tabular">
+        {{ totals().spentCents | brl }}
+        <small>de {{ totals().limitCents | brl }}</small>
+      </span>
+    </div>
+    <mat-progress-bar
+      mode="determinate"
+      [value]="totalBarValue()"
+      [class.is-over]="totals().ratio > 1"
+      aria-label="Consumo total dos orçamentos"
+    />
+    @if (totals().overCount) {
+      <p class="overview__alert" role="status">
+        <mat-icon aria-hidden="true">error</mat-icon>
+        {{ totals().overCount }}
+        {{ totals().overCount === 1 ? 'categoria passou' : 'categorias passaram' }} do limite neste
+        mês.
+      </p>
+    }
+  </section>
+
+  <ul class="list" role="list">
+    @for (item of progress(); track item.category.id) {
+      <li><app-budget-row [progress]="item" (edit)="editBudget(item.category)" /></li>
+    }
+  </ul>
+} @else {
+  <section class="overview">
+    <app-empty-state
+      icon="savings"
+      title="Nenhum orçamento definido"
+      message="Defina limites mensais para acompanhar seus gastos por categoria."
+    />
+  </section>
+}
+
+@if (withoutBudget().length) {
+  <section class="unbudgeted" aria-labelledby="unbudgeted-title">
+    <h2 id="unbudgeted-title" class="unbudgeted__title">Sem orçamento</h2>
+    <ul class="chips" role="list">
+      @for (category of withoutBudget(); track category.id) {
+        <li>
+          <button type="button" class="chip" (click)="editBudget(category)">
+            <app-category-icon [icon]="category.icon" [color]="category.color" [size]="28" />
+            {{ category.name }}
+            <mat-icon class="chip__add" aria-hidden="true">add</mat-icon>
+            <span class="visually-hidden">Definir orçamento</span>
+          </button>
+        </li>
+      }
+    </ul>
+  </section>
+}

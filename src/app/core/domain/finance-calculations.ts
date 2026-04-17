@@ -155,3 +155,25 @@ export function percentChange(current: number, previous: number): number | null 
   }
   return (current - previous) / previous;
 }
+
+/**
+ * Average monthly expense per category over the `count` months before `month`
+ * (the month itself is excluded, since it may still be in progress).
+ */
+export function averageMonthlyExpenses(
+  transactions: readonly Transaction[],
+  month: MonthKey,
+  count: number,
+): Map<string, number> {
+  const window = new Set(lastMonths(month, count + 1).slice(0, count));
+  const totals = new Map<string, number>();
+  for (const transaction of transactions) {
+    if (transaction.type === 'expense' && window.has(monthKeyOf(transaction.date))) {
+      totals.set(
+        transaction.categoryId,
+        (totals.get(transaction.categoryId) ?? 0) + transaction.amountCents,
+      );
+    }
+  }
+  return new Map([...totals].map(([categoryId, total]) => [categoryId, Math.round(total / count)]));
+}

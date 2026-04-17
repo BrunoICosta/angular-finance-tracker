@@ -1,0 +1,81 @@
+:host {
+  --status-color: var(--app-income);
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 8px 14px 16px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius);
+  background: var(--app-card);
+}
+
+:host(.is-warning) {
+  --status-color: var(--app-warning);
+}
+
+:host(.is-over) {
+  --status-color: var(--app-expense);
+  border-color: color-mix(in srgb, var(--app-expense) 45%, var(--app-border));
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+}
+
+.line--meta {
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-small);
+}
+
+.name {
+  font-weight: 600;
+}
+
+.values {
+  color: var(--mat-sys-on-surface-variant);
+
+  strong {
+    color: var(--mat-sys-on-surface);
+  }
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    color: var(--status-color);
+  }
+}
+
+:host(.is-over) .status,
+:host(.is-warning) .status {
+  color: var(--status-color);
+  font-weight: 600;
+}
+
+mat-progress-bar {
+  height: 8px;
+  border-radius: 999px;
+  --mat-progress-bar-active-indicator-color: var(--status-color);
+  --mat-progress-bar-track-color: color-mix(in srgb, var(--status-color) 18%, transparent);
+  --mat-progress-bar-track-height: 8px;
+  --mat-progress-bar-active-indicator-height: 8px;
+}

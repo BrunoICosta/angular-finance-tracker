@@ -23,6 +23,11 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/categories/categories.routes').then((m) => m.CATEGORIES_ROUTES),
       },
+      {
+        path: 'orcamentos',
+        loadChildren: () =>
+          import('./features/budgets/budgets.routes').then((m) => m.BUDGETS_ROUTES),
+      },
       { path: '**', redirectTo: 'dashboard' },
     ],
   },

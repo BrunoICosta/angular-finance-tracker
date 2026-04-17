@@ -11,7 +11,7 @@ const DEMO_BUDGETS: readonly Budget[] = [
   { categoryId: 'cat-food', limitCents: toCents(1500) },
   { categoryId: 'cat-transport', limitCents: toCents(450) },
   { categoryId: 'cat-leisure', limitCents: toCents(400) },
-  { categoryId: 'cat-subscriptions', limitCents: toCents(100) },
+  { categoryId: 'cat-subscriptions', limitCents: toCents(180) },
   { categoryId: 'cat-shopping', limitCents: toCents(350) },
 ];
 
