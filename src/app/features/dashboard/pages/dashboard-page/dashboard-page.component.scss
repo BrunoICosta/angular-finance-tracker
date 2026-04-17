@@ -31,6 +31,10 @@
   background: var(--app-card);
 }
 
+.panel--alerts {
+  border-color: color-mix(in srgb, var(--app-expense) 35%, var(--app-border));
+}
+
 .panel--wide {
   @media (min-width: 1024px) {
     grid-column: 1 / -1;

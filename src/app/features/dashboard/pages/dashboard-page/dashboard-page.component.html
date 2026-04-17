@@ -39,4 +39,17 @@
       />
     }
   </section>
+
+  @if (alerts().length) {
+    <section class="panel panel--alerts" aria-labelledby="alerts-title">
+      <header class="panel__header">
+        <div>
+          <h2 id="alerts-title" class="panel__title">Alertas de orçamento</h2>
+          <p class="panel__subtitle">{{ alertsSummary() }}</p>
+        </div>
+        <a mat-button routerLink="/orcamentos">Ver orçamentos</a>
+      </header>
+      <app-budget-alerts [alerts]="alerts()" />
+    </section>
+  }
 </div>
