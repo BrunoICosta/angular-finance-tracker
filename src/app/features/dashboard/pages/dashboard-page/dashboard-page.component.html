@@ -24,6 +24,27 @@
 </section>
 
 <div class="grid">
+  <section class="panel" aria-labelledby="expenses-title">
+    <header class="panel__header">
+      <h2 id="expenses-title" class="panel__title">Despesas por categoria</h2>
+    </header>
+    @if (expensesByCategory().length) {
+      @defer (on viewport) {
+        <app-expenses-chart [totals]="expensesByCategory()" />
+      } @placeholder {
+        <div class="chart-skeleton" aria-hidden="true"></div>
+      } @loading (minimum 200ms) {
+        <div class="chart-skeleton" role="status" aria-label="Carregando gráfico"></div>
+      }
+    } @else {
+      <app-empty-state
+        icon="donut_large"
+        title="Sem despesas neste mês"
+        message="Quando houver despesas, a distribuição por categoria aparece aqui."
+      />
+    }
+  </section>
+
   <section class="panel panel--recent" aria-labelledby="recent-title">
     <header class="panel__header">
       <h2 id="recent-title" class="panel__title">Últimas transações</h2>

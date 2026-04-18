@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import {
   budgetProgress,
+  expensesByCategory,
   percentChange,
   summarize,
   transactionsInMonth,
@@ -15,6 +16,7 @@ import { MonthNavigatorComponent } from '../../../../shared/components/month-nav
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { addMonths } from '../../../../shared/utils/month';
 import { BudgetAlertsComponent } from '../../components/budget-alerts/budget-alerts.component';
+import { ExpensesChartComponent } from '../../components/expenses-chart/expenses-chart.component';
 import { RecentTransactionsComponent } from '../../components/recent-transactions/recent-transactions.component';
 import { SummaryCardComponent } from '../../components/summary-card/summary-card.component';
 
@@ -32,6 +34,7 @@ const RECENT_LIMIT = 6;
     EmptyStateComponent,
     RecentTransactionsComponent,
     BudgetAlertsComponent,
+    ExpensesChartComponent,
   ],
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.scss',
@@ -59,6 +62,10 @@ export class DashboardPageComponent {
     const count = this.monthTransactions().length;
     return count === 1 ? '1 transação no mês' : `${count} transações no mês`;
   });
+
+  protected readonly expensesByCategory = computed(() =>
+    expensesByCategory(this.monthTransactions(), this.store.categoryById()),
+  );
 
   /** Budgets over the limit or close to it in the selected month, worst first. */
   protected readonly alerts = computed(() =>

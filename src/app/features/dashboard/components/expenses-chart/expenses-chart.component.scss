@@ -1,0 +1,79 @@
+:host {
+  display: block;
+  container-type: inline-size;
+}
+
+.layout {
+  display: grid;
+  gap: 20px;
+  align-items: center;
+
+  @container (min-width: 540px) {
+    grid-template-columns: 220px 1fr;
+  }
+}
+
+.chart {
+  position: relative;
+  height: 220px;
+}
+
+.chart__center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.chart__total {
+  font: var(--mat-sys-title-medium);
+  font-weight: 700;
+}
+
+.chart__caption {
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-small);
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legend__item {
+  display: grid;
+  grid-template-columns: 10px 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+  font: var(--mat-sys-body-medium);
+}
+
+.legend__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.legend__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.legend__share {
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-small);
+}
+
+.legend__value {
+  min-width: 5.5rem;
+  text-align: right;
+  font-weight: 600;
+}

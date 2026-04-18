@@ -60,3 +60,31 @@
   color: var(--mat-sys-on-surface-variant);
   font: var(--mat-sys-body-small);
 }
+
+.chart-skeleton {
+  height: 220px;
+  border-radius: var(--app-radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--mat-sys-surface-container) 0%,
+    var(--mat-sys-surface-container-high) 50%,
+    var(--mat-sys-surface-container) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chart-skeleton {
+    animation: none;
+  }
+}
