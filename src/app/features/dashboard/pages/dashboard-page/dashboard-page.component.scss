@@ -74,6 +74,10 @@
   animation: shimmer 1.4s ease-in-out infinite;
 }
 
+.chart-skeleton--tall {
+  height: 360px;
+}
+
 @keyframes shimmer {
   from {
     background-position: 100% 0;

@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import {
   budgetProgress,
   expensesByCategory,
+  monthlyTotals,
   percentChange,
   summarize,
   transactionsInMonth,
@@ -17,10 +18,12 @@ import { PageHeaderComponent } from '../../../../shared/components/page-header/p
 import { addMonths } from '../../../../shared/utils/month';
 import { BudgetAlertsComponent } from '../../components/budget-alerts/budget-alerts.component';
 import { ExpensesChartComponent } from '../../components/expenses-chart/expenses-chart.component';
+import { MonthlyChartComponent } from '../../components/monthly-chart/monthly-chart.component';
 import { RecentTransactionsComponent } from '../../components/recent-transactions/recent-transactions.component';
 import { SummaryCardComponent } from '../../components/summary-card/summary-card.component';
 
 const RECENT_LIMIT = 6;
+const HISTORY_MONTHS = 6;
 
 @Component({
   selector: 'app-dashboard-page',
@@ -35,6 +38,7 @@ const RECENT_LIMIT = 6;
     RecentTransactionsComponent,
     BudgetAlertsComponent,
     ExpensesChartComponent,
+    MonthlyChartComponent,
   ],
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.scss',
@@ -62,6 +66,11 @@ export class DashboardPageComponent {
     const count = this.monthTransactions().length;
     return count === 1 ? '1 transação no mês' : `${count} transações no mês`;
   });
+
+  protected readonly historyMonths = HISTORY_MONTHS;
+  protected readonly monthlyTotals = computed(() =>
+    monthlyTotals(this.store.transactions(), this.months.month(), HISTORY_MONTHS),
+  );
 
   protected readonly expensesByCategory = computed(() =>
     expensesByCategory(this.monthTransactions(), this.store.categoryById()),
