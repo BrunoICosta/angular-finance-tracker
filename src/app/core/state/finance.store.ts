@@ -138,6 +138,24 @@ export class FinanceStore {
     this.patch({ transactions: [transaction, ...this.transactions()] });
   }
 
+  /** Appends imported transactions (and the categories they need). Returns how many were added. */
+  importTransactions(
+    drafts: readonly TransactionDraft[],
+    newCategories: readonly Category[],
+  ): number {
+    const now = new Date().toISOString();
+    const imported: Transaction[] = drafts.map((draft) => ({
+      ...draft,
+      id: createId(),
+      createdAt: now,
+    }));
+    this.patch({
+      categories: [...this.categories(), ...newCategories],
+      transactions: [...imported, ...this.transactions()],
+    });
+    return imported.length;
+  }
+
   // Categories
 
   addCategory(draft: CategoryDraft): Category {

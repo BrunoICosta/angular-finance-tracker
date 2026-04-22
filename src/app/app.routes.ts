@@ -28,6 +28,11 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/budgets/budgets.routes').then((m) => m.BUDGETS_ROUTES),
       },
+      {
+        path: 'configuracoes',
+        loadChildren: () =>
+          import('./features/settings/settings.routes').then((m) => m.SETTINGS_ROUTES),
+      },
       { path: '**', redirectTo: 'dashboard' },
     ],
   },

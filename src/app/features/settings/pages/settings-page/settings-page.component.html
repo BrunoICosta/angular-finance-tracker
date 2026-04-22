@@ -1,0 +1,111 @@
+<app-page-header title="Configurações" subtitle="Aparência, importação e exportação de dados" />
+
+<div class="sections">
+  <section class="card" aria-labelledby="appearance-title">
+    <div class="card__heading">
+      <mat-icon class="card__icon" aria-hidden="true">palette</mat-icon>
+      <div>
+        <h2 id="appearance-title" class="card__title">Aparência</h2>
+        <p class="card__text">Escolha o tema da interface. A preferência fica salva.</p>
+      </div>
+    </div>
+    <mat-button-toggle-group
+      class="theme-toggle"
+      aria-label="Tema"
+      hideSingleSelectionIndicator
+      [value]="theme.theme()"
+      (change)="setTheme($event.value)"
+    >
+      <mat-button-toggle value="light"><mat-icon>light_mode</mat-icon> Claro</mat-button-toggle>
+      <mat-button-toggle value="dark"><mat-icon>dark_mode</mat-icon> Escuro</mat-button-toggle>
+    </mat-button-toggle-group>
+  </section>
+
+  <section class="card" aria-labelledby="export-title">
+    <div class="card__heading">
+      <mat-icon class="card__icon" aria-hidden="true">download</mat-icon>
+      <div>
+        <h2 id="export-title" class="card__title">Exportar CSV</h2>
+        <p class="card__text">
+          Baixe todas as {{ store.transactions().length }} transações em um arquivo compatível com
+          Excel e Google Planilhas.
+        </p>
+      </div>
+    </div>
+    <button
+      mat-flat-button
+      type="button"
+      [disabled]="!store.transactions().length"
+      (click)="exportCsv()"
+    >
+      <mat-icon>download</mat-icon>
+      Exportar transações
+    </button>
+  </section>
+
+  <section class="card" aria-labelledby="import-title">
+    <div class="card__heading">
+      <mat-icon class="card__icon" aria-hidden="true">upload</mat-icon>
+      <div>
+        <h2 id="import-title" class="card__title">Importar CSV</h2>
+        <p class="card__text">
+          Colunas aceitas: <code>{{ csvHeaders }}</code
+          >. Separador <code>;</code> ou <code>,</code>, datas em <code>aaaa-mm-dd</code> ou
+          <code>dd/mm/aaaa</code>. Categorias que não existirem serão criadas.
+        </p>
+      </div>
+    </div>
+    <input
+      #fileInput
+      id="csv-file"
+      class="visually-hidden"
+      type="file"
+      tabindex="-1"
+      aria-hidden="true"
+      accept=".csv,text/csv"
+      (change)="importCsv(fileInput)"
+    />
+    <button mat-stroked-button type="button" [disabled]="importing()" (click)="fileInput.click()">
+      @if (importing()) {
+        <mat-spinner diameter="18" />
+      } @else {
+        <mat-icon>upload_file</mat-icon>
+      }
+      Escolher arquivo
+    </button>
+
+    @if (importError(); as message) {
+      <p class="feedback feedback--error" role="alert">
+        <mat-icon aria-hidden="true">error</mat-icon>
+        {{ message }}
+      </p>
+    }
+    @if (importSummary(); as summary) {
+      <div class="feedback" role="status">
+        <p class="feedback__title">
+          <mat-icon aria-hidden="true">{{ summary.imported ? 'check_circle' : 'info' }}</mat-icon>
+          {{ summary.fileName }}: {{ summary.imported }}
+          {{ summary.imported === 1 ? 'transação importada' : 'transações importadas' }}
+          @if (summary.newCategories) {
+            · {{ summary.newCategories }}
+            {{ summary.newCategories === 1 ? 'categoria criada' : 'categorias criadas' }}
+          }
+        </p>
+        @if (summary.errors.length) {
+          <p class="feedback__subtitle">
+            {{ summary.errors.length }}
+            {{ summary.errors.length === 1 ? 'linha ignorada' : 'linhas ignoradas' }}:
+          </p>
+          <ul class="feedback__errors">
+            @for (error of summary.errors.slice(0, 5); track error.line) {
+              <li>Linha {{ error.line }}: {{ error.message }}</li>
+            }
+            @if (summary.errors.length > 5) {
+              <li>e mais {{ summary.errors.length - 5 }}…</li>
+            }
+          </ul>
+        }
+      </div>
+    }
+  </section>
+</div>

@@ -9,4 +9,5 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { path: '/transacoes', label: 'Transações', icon: 'receipt_long' },
   { path: '/orcamentos', label: 'Orçamentos', icon: 'savings' },
   { path: '/categorias', label: 'Categorias', icon: 'category' },
+  { path: '/configuracoes', label: 'Configurações', icon: 'settings' },
 ];
