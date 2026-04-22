@@ -108,4 +108,27 @@
       </div>
     }
   </section>
+
+  <section class="card card--danger" aria-labelledby="data-title">
+    <div class="card__heading">
+      <mat-icon class="card__icon" aria-hidden="true">delete_sweep</mat-icon>
+      <div>
+        <h2 id="data-title" class="card__title">Dados</h2>
+        <p class="card__text">
+          Seus dados ficam apenas neste navegador. Limpar remove todas as transações e orçamentos e
+          mantém as categorias padrão. Exporte um CSV antes se quiser guardar uma cópia.
+        </p>
+      </div>
+    </div>
+    <div class="card__actions">
+      <button mat-flat-button type="button" class="danger" (click)="clearData()">
+        <mat-icon>delete_forever</mat-icon>
+        Limpar dados
+      </button>
+      <button mat-stroked-button type="button" (click)="restoreDemo()">
+        <mat-icon>restart_alt</mat-icon>
+        Restaurar dados de demonstração
+      </button>
+    </div>
+  </section>
 </div>

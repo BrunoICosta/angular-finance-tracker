@@ -6,6 +6,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { Theme, ThemeService } from '../../../../core/services/theme.service';
 import { FinanceStore } from '../../../../core/state/finance.store';
+import { ConfirmDialogService } from '../../../../shared/components/confirm-dialog/confirm-dialog.service';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { toIsoDate } from '../../../../shared/utils/month';
 import { FileTransferService } from '../../data-access/file-transfer.service';
@@ -45,6 +46,7 @@ export class SettingsPageComponent {
   protected readonly theme = inject(ThemeService);
   private readonly files = inject(FileTransferService);
   private readonly notifications = inject(NotificationService);
+  private readonly confirmDialog = inject(ConfirmDialogService);
 
   protected readonly csvHeaders = CSV_HEADERS.join(';');
   protected readonly importing = signal(false);
@@ -93,6 +95,34 @@ export class SettingsPageComponent {
       );
     } finally {
       this.importing.set(false);
+    }
+  }
+
+  protected async clearData(): Promise<void> {
+    const confirmed = await this.confirmDialog.confirm({
+      title: 'Limpar todos os dados?',
+      message:
+        'Todas as transações, orçamentos e categorias personalizadas serão apagados. Essa ação não pode ser desfeita.',
+      confirmLabel: 'Limpar dados',
+      destructive: true,
+    });
+    if (confirmed) {
+      this.store.clearAll();
+      this.importSummary.set(null);
+      this.notifications.success('Dados apagados. Comece do zero!');
+    }
+  }
+
+  protected async restoreDemo(): Promise<void> {
+    const confirmed = await this.confirmDialog.confirm({
+      title: 'Restaurar dados de demonstração?',
+      message: 'Seus dados atuais serão substituídos pelos dados de exemplo.',
+      confirmLabel: 'Restaurar',
+    });
+    if (confirmed) {
+      this.store.restoreDemo();
+      this.importSummary.set(null);
+      this.notifications.success('Dados de demonstração restaurados.');
     }
   }
 }
