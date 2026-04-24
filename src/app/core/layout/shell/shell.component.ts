@@ -1,18 +1,16 @@
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { ChangeDetectionStrategy, Component, effect, inject, viewChild } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { map } from 'rxjs';
+import { NotificationService } from '../../services/notification.service';
 import { ThemeService } from '../../services/theme.service';
 import { FinanceStore } from '../../state/finance.store';
+import { injectMediaQuery } from '../../../shared/utils/responsive';
 import { NAV_ITEMS } from '../nav-items';
 
 @Component({
@@ -38,21 +36,17 @@ export class ShellComponent {
   protected readonly theme = inject(ThemeService);
   protected readonly navItems = NAV_ITEMS;
 
-  private readonly snackBar = inject(MatSnackBar);
+  private readonly notifications = inject(NotificationService);
   private readonly drawer = viewChild(MatSidenav);
 
-  protected readonly isHandset = toSignal(
-    inject(BreakpointObserver)
-      .observe('(max-width: 959.98px)')
-      .pipe(map((state) => state.matches)),
-    { initialValue: false },
-  );
+  /** Below this width the menu becomes an overlay drawer. */
+  protected readonly isHandset = injectMediaQuery('(max-width: 959.98px)');
 
   constructor() {
     effect(() => {
       const message = this.store.saveError();
       if (message) {
-        this.snackBar.open(`Erro ao salvar: ${message}`, 'Fechar', { duration: 6000 });
+        this.notifications.error(`Erro ao salvar: ${message}`);
       }
     });
   }

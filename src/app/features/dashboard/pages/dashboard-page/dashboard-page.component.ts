@@ -72,6 +72,10 @@ export class DashboardPageComponent {
     monthlyTotals(this.store.transactions(), this.months.month(), HISTORY_MONTHS),
   );
 
+  protected readonly hasHistory = computed(() =>
+    this.monthlyTotals().some((month) => month.incomeCents > 0 || month.expenseCents > 0),
+  );
+
   protected readonly expensesByCategory = computed(() =>
     expensesByCategory(this.monthTransactions(), this.store.categoryById()),
   );

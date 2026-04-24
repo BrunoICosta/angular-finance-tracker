@@ -52,16 +52,24 @@
         <p class="panel__subtitle">Últimos {{ historyMonths }} meses</p>
       </div>
     </header>
-    @defer (on viewport) {
-      <app-monthly-chart [months]="monthlyTotals()" />
-    } @placeholder {
-      <div class="chart-skeleton chart-skeleton--tall" aria-hidden="true"></div>
-    } @loading (minimum 200ms) {
-      <div
-        class="chart-skeleton chart-skeleton--tall"
-        role="status"
-        aria-label="Carregando gráfico"
-      ></div>
+    @if (hasHistory()) {
+      @defer (on viewport) {
+        <app-monthly-chart [months]="monthlyTotals()" />
+      } @placeholder {
+        <div class="chart-skeleton chart-skeleton--tall" aria-hidden="true"></div>
+      } @loading (minimum 200ms) {
+        <div
+          class="chart-skeleton chart-skeleton--tall"
+          role="status"
+          aria-label="Carregando gráfico"
+        ></div>
+      }
+    } @else {
+      <app-empty-state
+        icon="bar_chart"
+        title="Sem histórico ainda"
+        message="Os totais mensais aparecem aqui conforme você registra transações."
+      />
     }
   </section>
 

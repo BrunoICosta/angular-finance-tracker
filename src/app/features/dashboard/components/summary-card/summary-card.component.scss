@@ -5,10 +5,14 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 20px;
+  padding: 16px;
   border: 1px solid var(--app-border);
   border-radius: var(--app-radius);
   background: var(--app-card);
+
+  @media (min-width: 720px) {
+    padding: 20px;
+  }
 }
 
 :host(.card--income) {
@@ -22,12 +26,18 @@
 }
 
 :host(.card--balance) {
-  background: linear-gradient(
-    140deg,
-    var(--mat-sys-primary-container),
-    color-mix(in srgb, var(--mat-sys-tertiary-container) 55%, var(--app-card))
-  );
   border-color: transparent;
+  background: linear-gradient(
+    135deg,
+    var(--mat-sys-primary-container),
+    color-mix(in srgb, var(--mat-sys-primary-container) 30%, var(--app-card))
+  );
+  color: var(--mat-sys-on-primary-container);
+
+  .card__label,
+  .card__hint {
+    color: color-mix(in srgb, var(--mat-sys-on-primary-container) 80%, transparent);
+  }
 }
 
 .card__header {
@@ -53,10 +63,22 @@
 
 .card__value {
   margin: 0;
-  font: var(--mat-sys-headline-medium);
+  font: var(--mat-sys-title-large);
   font-weight: 700;
   letter-spacing: -0.02em;
   overflow-wrap: anywhere;
+}
+
+@media (min-width: 720px) {
+  .card__value {
+    font: var(--mat-sys-headline-medium);
+    font-weight: 700;
+  }
+}
+
+:host(.card--balance) .card__value {
+  font: var(--mat-sys-headline-medium);
+  font-weight: 700;
 }
 
 .card__value--negative {
