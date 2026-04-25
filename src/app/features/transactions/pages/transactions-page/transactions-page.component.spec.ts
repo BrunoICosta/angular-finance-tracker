@@ -1,0 +1,99 @@
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
+import { LOCALE_ID, provideZonelessChangeDetection } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { DEFAULT_CATEGORIES } from '../../../../core/data/default-categories';
+import { FINANCE_DATA_VERSION, Transaction } from '../../../../core/models';
+import { FinanceStore } from '../../../../core/state/finance.store';
+import { SelectedMonthStore } from '../../../../core/state/selected-month.store';
+import { FinanceRepository } from '../../../../core/storage/finance.repository';
+import { InMemoryFinanceRepository } from '../../../../core/storage/in-memory-finance.repository';
+import { providePtBrPaginator } from '../../../../shared/i18n/pt-br-paginator-intl';
+import { TransactionsPageComponent } from './transactions-page.component';
+
+function makeTransactions(count: number): Transaction[] {
+  return Array.from({ length: count }, (_, index) => ({
+    id: `t${index}`,
+    description: index === 0 ? 'Padaria do bairro' : `Compra ${index}`,
+    amountCents: 1000 + index,
+    date: `2026-04-${String((index % 28) + 1).padStart(2, '0')}`,
+    type: 'expense' as const,
+    categoryId: 'cat-food',
+    createdAt: '2026-04-01T10:00:00.000Z',
+  }));
+}
+
+describe('TransactionsPageComponent', () => {
+  let fixture: ComponentFixture<TransactionsPageComponent>;
+
+  beforeAll(() => registerLocaleData(localePt, 'pt-BR'));
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TransactionsPageComponent],
+      providers: [
+        provideZonelessChangeDetection(),
+        providePtBrPaginator(),
+        { provide: LOCALE_ID, useValue: 'pt-BR' },
+        {
+          provide: FinanceRepository,
+          useValue: new InMemoryFinanceRepository({
+            version: FINANCE_DATA_VERSION,
+            transactions: makeTransactions(23),
+            categories: DEFAULT_CATEGORIES,
+            budgets: [],
+          }),
+        },
+      ],
+    }).compileComponents();
+    await TestBed.inject(FinanceStore).load();
+    TestBed.inject(SelectedMonthStore).select('2026-04');
+    fixture = TestBed.createComponent(TransactionsPageComponent);
+    await fixture.whenStable();
+  });
+
+  const element = (): HTMLElement => fixture.nativeElement as HTMLElement;
+  const rows = (): number => element().querySelectorAll('tr.mat-mdc-row').length;
+
+  it('shows the first page and the total count', () => {
+    expect(element().querySelector('#results-title')?.textContent).toContain('23 transações');
+    expect(rows()).toBe(10);
+    expect(element().querySelector('.mat-mdc-paginator-range-label')?.textContent).toContain(
+      '1–10 de 23',
+    );
+  });
+
+  it('filters by text and resets to the first page', async () => {
+    (element().querySelector('button[aria-label="Próxima página"]') as HTMLButtonElement).click();
+    await fixture.whenStable();
+    expect(element().querySelector('.mat-mdc-paginator-range-label')?.textContent).toContain(
+      '11–20 de 23',
+    );
+
+    const search = element().querySelector('input[type="search"]') as HTMLInputElement;
+    search.value = 'padaria';
+    search.dispatchEvent(new Event('input'));
+    await fixture.whenStable();
+
+    expect(rows()).toBe(1);
+    expect(element().textContent).toContain('Padaria do bairro');
+    expect(element().querySelector('.mat-mdc-paginator-range-label')?.textContent).toContain(
+      '1–1 de 1',
+    );
+  });
+
+  it('shows a "nothing found" state with a way to clear the filters', async () => {
+    const search = element().querySelector('input[type="search"]') as HTMLInputElement;
+    search.value = 'inexistente';
+    search.dispatchEvent(new Event('input'));
+    await fixture.whenStable();
+
+    expect(element().textContent).toContain('Nada encontrado');
+    const clear = [...element().querySelectorAll('button')].find((button) =>
+      button.textContent?.includes('Limpar filtros'),
+    ) as HTMLButtonElement;
+    clear.click();
+    await fixture.whenStable();
+    expect(rows()).toBe(10);
+  });
+});
