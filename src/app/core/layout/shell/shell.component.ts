@@ -51,6 +51,15 @@ export class ShellComponent {
     });
   }
 
+  /**
+   * A plain `href="#main-content"` would resolve against `<base href>` and navigate away
+   * when the app is served from a sub-path (GitHub Pages), so focus the landmark instead.
+   */
+  protected skipToContent(main: HTMLElement): void {
+    main.focus();
+    main.scrollIntoView({ block: 'start' });
+  }
+
   protected onNavigate(): void {
     if (this.isHandset()) {
       void this.drawer()?.close();

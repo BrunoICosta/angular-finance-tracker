@@ -9,7 +9,10 @@
   left: 8px;
   z-index: 1000;
   padding: 8px 16px;
+  border: 0;
   border-radius: var(--app-radius-sm);
+  font: var(--mat-sys-label-large);
+  cursor: pointer;
   background: var(--mat-sys-primary);
   color: var(--mat-sys-on-primary);
   transform: translateY(-200%);
