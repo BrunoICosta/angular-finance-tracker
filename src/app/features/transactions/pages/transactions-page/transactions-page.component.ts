@@ -83,8 +83,16 @@ export class TransactionsPageComponent {
   protected readonly sorted = computed(() =>
     sortTransactions(this.filtered(), this.sort(), this.store.categoryById()),
   );
+  /**
+   * The requested page clamped to the last existing one, so deleting the only row of the last
+   * page (or importing/clearing data) never leaves the table on an empty page.
+   */
+  protected readonly currentPage = computed(() => {
+    const lastPage = Math.max(0, Math.ceil(this.sorted().length / this.pageSize()) - 1);
+    return Math.min(this.pageIndex(), lastPage);
+  });
   protected readonly page = computed(() =>
-    paginate(this.sorted(), this.pageIndex(), this.pageSize()),
+    paginate(this.sorted(), this.currentPage(), this.pageSize()),
   );
   protected readonly totals = computed(() => summarize(this.filtered()));
   protected readonly isFiltering = computed(() => hasActiveFilters(this.filters()));

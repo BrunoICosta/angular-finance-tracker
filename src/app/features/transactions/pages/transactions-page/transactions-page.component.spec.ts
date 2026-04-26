@@ -96,4 +96,24 @@ describe('TransactionsPageComponent', () => {
     await fixture.whenStable();
     expect(rows()).toBe(10);
   });
+
+  it('stays on the last existing page when rows are removed', async () => {
+    const next = (): HTMLButtonElement =>
+      element().querySelector('button[aria-label="Próxima página"]') as HTMLButtonElement;
+    next().click();
+    next().click();
+    await fixture.whenStable();
+    expect(rows()).toBe(3);
+
+    const store = TestBed.inject(FinanceStore);
+    for (const id of ['t20', 't21', 't22']) {
+      store.removeTransaction(id);
+    }
+    await fixture.whenStable();
+
+    expect(rows()).toBe(10);
+    expect(element().querySelector('.mat-mdc-paginator-range-label')?.textContent).toContain(
+      '11–20 de 20',
+    );
+  });
 });
