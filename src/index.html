@@ -11,6 +11,18 @@
     />
     <meta name="theme-color" content="#6b4fbb" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <script>
+      // Apply the saved (or OS) theme before Angular boots to avoid a light flash.
+      (function () {
+        try {
+          var saved = localStorage.getItem('finance-tracker:theme');
+          var dark = saved
+            ? saved === 'dark'
+            : window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (dark) document.documentElement.classList.add('dark-theme');
+        } catch (e) {}
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
