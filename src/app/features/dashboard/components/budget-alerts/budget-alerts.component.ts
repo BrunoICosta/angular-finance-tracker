@@ -1,13 +1,14 @@
-import { PercentPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { BudgetProgress } from '../../../../core/domain/finance-calculations';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { BrlPipe } from '../../../../shared/pipes/brl.pipe';
+import { LocalPercentPipe } from '../../../../shared/pipes/local-percent.pipe';
 
 /** Budgets that are over the limit or close to it. */
 @Component({
   selector: 'app-budget-alerts',
-  imports: [MatIconModule, BrlPipe, PercentPipe],
+  imports: [MatIconModule, BrlPipe, LocalPercentPipe, TranslocoPipe],
   template: `
     <ul class="alerts" role="list">
       @for (alert of alerts(); track alert.category.id) {
@@ -19,13 +20,21 @@ import { BrlPipe } from '../../../../shared/pipes/brl.pipe';
             <span class="alert__title">
               {{ alert.category.name }}
               <span class="visually-hidden">:</span>
-              <span class="alert__ratio tabular">{{ alert.ratio | percent: '1.0-0' }}</span>
+              <span class="alert__ratio tabular">{{ alert.ratio | localPercent }}</span>
             </span>
             <span class="alert__detail">
               @if (alert.status === 'over') {
-                Passou {{ -alert.remainingCents | brl }} do limite de {{ alert.limitCents | brl }}
+                {{
+                  'dashboard.alerts.overDetail'
+                    | transloco
+                      : { amount: (-alert.remainingCents | brl), limit: (alert.limitCents | brl) }
+                }}
               } @else {
-                Restam {{ alert.remainingCents | brl }} de {{ alert.limitCents | brl }}
+                {{
+                  'dashboard.alerts.warningDetail'
+                    | transloco
+                      : { amount: (alert.remainingCents | brl), limit: (alert.limitCents | brl) }
+                }}
               }
             </span>
           </div>

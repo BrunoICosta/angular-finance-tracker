@@ -1,0 +1,70 @@
+{
+  "title": "Settings",
+  "subtitle": "Appearance, language, data import and export",
+  "appearance": {
+    "title": "Appearance and language",
+    "text": "Choose the theme and the language of the interface. Your choices are saved.",
+    "theme": "Theme",
+    "language": "Language"
+  },
+  "export": {
+    "title": "Export CSV",
+    "text": {
+      "one": "Download your only transaction as a file that opens in Excel and Google Sheets.",
+      "other": "Download all {{count}} transactions as a file that opens in Excel and Google Sheets."
+    },
+    "action": "Export transactions",
+    "filePrefix": "finances",
+    "done": "{{count}} transactions exported."
+  },
+  "import": {
+    "title": "Import CSV",
+    "columns": "Accepted columns:",
+    "help": "Separator , or ; and dates as yyyy-mm-dd or dd/mm/yyyy. Headers in English or Portuguese. Missing categories are created.",
+    "choose": "Choose file",
+    "done": "{{count}} transactions imported.",
+    "imported": {
+      "one": "{{file}}: 1 transaction imported",
+      "other": "{{file}}: {{count}} transactions imported"
+    },
+    "categoriesCreated": {
+      "one": "1 category created",
+      "other": "{{count}} categories created"
+    },
+    "skipped": {
+      "one": "1 line skipped:",
+      "other": "{{count}} lines skipped:"
+    },
+    "line": "Line {{line}}:",
+    "more": "and {{count}} more…",
+    "fallbackIncome": "Other income",
+    "fallbackExpense": "Other expenses",
+    "errors": {
+      "tooLarge": "File too large. The limit is 2 MB.",
+      "unreadable": "The file could not be read.",
+      "empty": "The file is empty.",
+      "missingColumns": "Missing required columns: {{columns}}.",
+      "date": "Invalid date: \"{{value}}\".",
+      "description": "Empty description.",
+      "amount": "Invalid amount: \"{{value}}\".",
+      "type": "Unknown type: \"{{value}}\"."
+    }
+  },
+  "data": {
+    "title": "Data",
+    "text": "Your data lives in this browser only. Clearing removes every transaction and budget and keeps the default categories. Export a CSV first if you want a copy.",
+    "clear": "Clear data",
+    "restore": "Restore demo data",
+    "clearConfirm": {
+      "title": "Clear all data?",
+      "message": "All transactions, budgets and custom categories will be deleted. This cannot be undone."
+    },
+    "restoreConfirm": {
+      "title": "Restore demo data?",
+      "message": "Your current data will be replaced by the sample data.",
+      "confirm": "Restore"
+    },
+    "cleared": "Data cleared. Start fresh!",
+    "restored": "Demo data restored."
+  }
+}

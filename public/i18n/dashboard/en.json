@@ -1,0 +1,53 @@
+{
+  "title": "Overview",
+  "subtitle": "Your month at a glance",
+  "loadingChart": "Loading chart",
+  "summary": {
+    "label": "Month summary",
+    "balance": "Month balance",
+    "income": "Income",
+    "expenses": "Expenses",
+    "transactionsInMonth": {
+      "one": "1 transaction this month",
+      "other": "{{count}} transactions this month"
+    },
+    "noPrevious": "No data for the previous month",
+    "samePrevious": "Same as last month",
+    "up": "▲ {{percent}}% vs. last month",
+    "down": "▼ {{percent}}% vs. last month"
+  },
+  "expensesByCategory": {
+    "title": "Expenses by category",
+    "caption": "in expenses",
+    "emptyTitle": "No expenses this month",
+    "emptyMessage": "Once you have expenses, their split by category shows up here.",
+    "aria": "Expenses by category: {{items}}"
+  },
+  "monthly": {
+    "title": "Income vs expenses",
+    "subtitle": "Last {{count}} months",
+    "emptyTitle": "No history yet",
+    "emptyMessage": "Monthly totals show up here as you record transactions.",
+    "aria": "Income and expenses per month: {{items}}"
+  },
+  "recent": {
+    "title": "Latest transactions",
+    "seeAll": "See all",
+    "emptyTitle": "No transactions this month",
+    "emptyMessage": "Record income and expenses to follow your balance."
+  },
+  "alerts": {
+    "title": "Budget alerts",
+    "seeBudgets": "See budgets",
+    "over": {
+      "one": "1 over the limit",
+      "other": "{{count}} over the limit"
+    },
+    "warning": {
+      "one": "1 close to the limit",
+      "other": "{{count}} close to the limit"
+    },
+    "overDetail": "{{amount}} over the {{limit}} limit",
+    "warningDetail": "{{amount}} left of {{limit}}"
+  }
+}

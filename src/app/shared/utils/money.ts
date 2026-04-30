@@ -8,11 +8,19 @@ export function fromCents(cents: number): number {
   return cents / 100;
 }
 
-const BRL_FORMATTER = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+const formatters = new Map<string, Intl.NumberFormat>();
 
-/** Formats cents as BRL (`R$ 1.234,56`). Useful outside templates (charts, CSV). */
-export function formatBrl(cents: number): string {
-  return BRL_FORMATTER.format(fromCents(cents));
+/**
+ * Formats cents as BRL in the given locale (`R$ 1.234,56` in pt-BR, `R$1,234.56` in en-US).
+ * Useful outside templates (charts, aria labels).
+ */
+export function formatBrl(cents: number, locale = 'pt-BR'): string {
+  let formatter = formatters.get(locale);
+  if (!formatter) {
+    formatter = new Intl.NumberFormat(locale, { style: 'currency', currency: 'BRL' });
+    formatters.set(locale, formatter);
+  }
+  return formatter.format(fromCents(cents));
 }
 
 /**

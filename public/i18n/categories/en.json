@@ -1,0 +1,93 @@
+{
+  "title": "Categories",
+  "subtitle": "Organize your transactions with colors and icons",
+  "new": "New category",
+  "create": "Create category",
+  "addTo": {
+    "expense": "Add an expense category",
+    "income": "Add an income category"
+  },
+  "usage": {
+    "none": "No transactions",
+    "one": "1 transaction",
+    "other": "{{count}} transactions"
+  },
+  "empty": {
+    "title": "No categories",
+    "message": {
+      "expense": "Create expense categories to classify your entries.",
+      "income": "Create income categories to classify your entries."
+    }
+  },
+  "form": {
+    "newTitle": "New category",
+    "editTitle": "Edit category",
+    "namePlaceholder": "Category name",
+    "type": "Category type",
+    "typeLocked": "The type cannot be changed because the category already has transactions.",
+    "name": "Name",
+    "color": "Color",
+    "customColor": "Custom color",
+    "icon": "Icon",
+    "errors": {
+      "name": "Enter a name.",
+      "duplicate": "A category with this name already exists."
+    }
+  },
+  "delete": {
+    "title": "Delete category?",
+    "message": "\"{{name}}\" and its budget will be removed."
+  },
+  "toast": {
+    "created": "Category \"{{name}}\" created.",
+    "updated": "Category updated.",
+    "deleted": "Category deleted.",
+    "inUse": "\"{{name}}\" has {{count}} transaction(s). Move or delete them before removing the category."
+  },
+  "colors": {
+    "violet": "Violet",
+    "purple": "Purple",
+    "pink": "Pink",
+    "red": "Red",
+    "orange": "Orange",
+    "mustard": "Mustard",
+    "green": "Green",
+    "teal": "Teal",
+    "petrol": "Petrol blue",
+    "blue": "Blue",
+    "slate": "Slate",
+    "gray": "Gray"
+  },
+  "icons": {
+    "payments": "Payments",
+    "work": "Work",
+    "trending_up": "Investments",
+    "savings": "Savings",
+    "card_giftcard": "Gift",
+    "home": "Home",
+    "restaurant": "Restaurant",
+    "shopping_cart": "Groceries",
+    "directions_car": "Car",
+    "directions_bus": "Bus",
+    "local_gas_station": "Fuel",
+    "favorite": "Health",
+    "medication": "Medicine",
+    "fitness_center": "Gym",
+    "sports_esports": "Games",
+    "movie": "Movies",
+    "flight": "Travel",
+    "school": "Education",
+    "menu_book": "Books",
+    "subscriptions": "Subscriptions",
+    "wifi": "Internet",
+    "bolt": "Electricity",
+    "water_drop": "Water",
+    "shopping_bag": "Shopping",
+    "checkroom": "Clothes",
+    "pets": "Pets",
+    "child_care": "Kids",
+    "receipt_long": "Bills",
+    "account_balance": "Bank",
+    "more_horiz": "Other"
+  }
+}

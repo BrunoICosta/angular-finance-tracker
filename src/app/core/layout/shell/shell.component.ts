@@ -7,6 +7,8 @@ import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
+import { LanguageSwitcherComponent } from '../../../shared/components/language-switcher/language-switcher.component';
 import { NotificationService } from '../../services/notification.service';
 import { ThemeService } from '../../services/theme.service';
 import { FinanceStore } from '../../state/finance.store';
@@ -26,6 +28,8 @@ import { NAV_ITEMS } from '../nav-items';
     MatButtonModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
+    TranslocoPipe,
+    LanguageSwitcherComponent,
   ],
   templateUrl: './shell.component.html',
   styleUrl: './shell.component.scss',
@@ -46,7 +50,7 @@ export class ShellComponent {
     effect(() => {
       const message = this.store.saveError();
       if (message) {
-        this.notifications.error(`Erro ao salvar: ${message}`);
+        this.notifications.error('shell.saveError');
       }
     });
   }

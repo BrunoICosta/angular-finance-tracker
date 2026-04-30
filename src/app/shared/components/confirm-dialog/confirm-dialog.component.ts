@@ -1,10 +1,14 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslationParams } from '../../i18n/translated-text';
 
+/** All texts are translation keys; `params` are interpolated into the message. */
 export interface ConfirmDialogData {
   readonly title: string;
   readonly message: string;
+  readonly params?: TranslationParams;
   readonly confirmLabel?: string;
   readonly cancelLabel?: string;
   /** Styles the confirm button as a destructive action. */
@@ -13,15 +17,15 @@ export interface ConfirmDialogData {
 
 @Component({
   selector: 'app-confirm-dialog',
-  imports: [MatDialogModule, MatButtonModule],
+  imports: [MatDialogModule, MatButtonModule, TranslocoPipe],
   template: `
-    <h2 mat-dialog-title>{{ data.title }}</h2>
+    <h2 mat-dialog-title>{{ data.title | transloco: data.params }}</h2>
     <mat-dialog-content>
-      <p class="message">{{ data.message }}</p>
+      <p class="message">{{ data.message | transloco: data.params }}</p>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
       <button mat-button type="button" [mat-dialog-close]="false">
-        {{ data.cancelLabel ?? 'Cancelar' }}
+        {{ data.cancelLabel ?? 'common.cancel' | transloco }}
       </button>
       <button
         mat-flat-button
@@ -30,7 +34,7 @@ export interface ConfirmDialogData {
         [class.destructive]="data.destructive"
         [mat-dialog-close]="true"
       >
-        {{ data.confirmLabel ?? 'Confirmar' }}
+        {{ data.confirmLabel ?? 'common.confirm' | transloco }}
       </button>
     </mat-dialog-actions>
   `,

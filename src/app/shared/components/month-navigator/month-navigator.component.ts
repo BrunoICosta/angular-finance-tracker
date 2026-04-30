@@ -1,30 +1,33 @@
-import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslocoPipe } from '@jsverse/transloco';
+import { LocalDatePipe } from '../../pipes/local-date.pipe';
 import { SelectedMonthStore } from '../../../core/state/selected-month.store';
 
 @Component({
   selector: 'app-month-navigator',
-  imports: [DatePipe, MatButtonModule, MatIconModule, MatTooltipModule],
+  imports: [LocalDatePipe, MatButtonModule, MatIconModule, MatTooltipModule, TranslocoPipe],
   template: `
-    <div class="navigator" role="group" aria-label="Selecionar mês">
+    <div class="navigator" role="group" [attr.aria-label]="'monthNavigator.label' | transloco">
       <button
         mat-icon-button
         type="button"
-        aria-label="Mês anterior"
-        matTooltip="Mês anterior"
+        [attr.aria-label]="'monthNavigator.previous' | transloco"
+        [matTooltip]="'monthNavigator.previous' | transloco"
         (click)="months.previous()"
       >
         <mat-icon>chevron_left</mat-icon>
       </button>
-      <span class="navigator__label" aria-live="polite">{{ months.date() | date: 'MMMM y' }}</span>
+      <span class="navigator__label" aria-live="polite">{{
+        months.date() | localDate: 'MMMM y'
+      }}</span>
       <button
         mat-icon-button
         type="button"
-        aria-label="Próximo mês"
-        matTooltip="Próximo mês"
+        [attr.aria-label]="'monthNavigator.next' | transloco"
+        [matTooltip]="'monthNavigator.next' | transloco"
         (click)="months.next()"
       >
         <mat-icon>chevron_right</mat-icon>
@@ -32,7 +35,7 @@ import { SelectedMonthStore } from '../../../core/state/selected-month.store';
     </div>
     @if (!months.isCurrentMonth()) {
       <button mat-button type="button" class="navigator__today" (click)="months.goToCurrent()">
-        Mês atual
+        {{ 'monthNavigator.current' | transloco }}
       </button>
     }
   `,

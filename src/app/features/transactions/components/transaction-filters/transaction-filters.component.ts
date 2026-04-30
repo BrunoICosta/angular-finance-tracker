@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Category } from '../../../../core/models';
 import {
   DEFAULT_FILTERS,
@@ -24,6 +25,7 @@ import {
     MatSlideToggleModule,
     MatButtonModule,
     MatIconModule,
+    TranslocoPipe,
   ],
   templateUrl: './transaction-filters.component.html',
   styleUrl: './transaction-filters.component.scss',
@@ -40,6 +42,9 @@ export class TransactionFiltersComponent {
       : this.categories().filter((category) => category.type === type);
   });
   protected readonly canClear = computed(() => hasActiveFilters(this.filters()));
+  protected readonly selectedCategoryName = computed(
+    () => this.categories().find((category) => category.id === this.filters().categoryId)?.name,
+  );
 
   protected setSearch(search: string): void {
     this.filters.update((filters) => ({ ...filters, search }));

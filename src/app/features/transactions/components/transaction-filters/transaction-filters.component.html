@@ -1,13 +1,13 @@
-<div class="filters" role="search" aria-label="Filtrar transações">
+<div class="filters" role="search" [attr.aria-label]="'transactions.filters.label' | transloco">
   <mat-form-field appearance="outline" class="filters__search" subscriptSizing="dynamic">
-    <mat-label>Buscar</mat-label>
+    <mat-label>{{ 'transactions.filters.search' | transloco }}</mat-label>
     <mat-icon matPrefix>search</mat-icon>
     <input
       #searchInput
       matInput
       type="search"
       autocomplete="off"
-      placeholder="Descrição, observação ou categoria"
+      [placeholder]="'transactions.filters.searchPlaceholder' | transloco"
       [value]="filters().search"
       (input)="setSearch(searchInput.value)"
     />
@@ -15,20 +15,28 @@
 
   <mat-button-toggle-group
     class="filters__type"
-    aria-label="Tipo"
     hideSingleSelectionIndicator
+    [attr.aria-label]="'transactions.filters.type' | transloco"
     [value]="filters().type"
     (change)="setType($event.value)"
   >
-    <mat-button-toggle value="all">Todas</mat-button-toggle>
-    <mat-button-toggle value="income">Receitas</mat-button-toggle>
-    <mat-button-toggle value="expense">Despesas</mat-button-toggle>
+    <mat-button-toggle value="all">{{ 'transactions.filters.all' | transloco }}</mat-button-toggle>
+    <mat-button-toggle value="income">{{
+      'common.type.incomePlural' | transloco
+    }}</mat-button-toggle>
+    <mat-button-toggle value="expense">{{
+      'common.type.expensePlural' | transloco
+    }}</mat-button-toggle>
   </mat-button-toggle-group>
 
   <mat-form-field appearance="outline" class="filters__category" subscriptSizing="dynamic">
-    <mat-label>Categoria</mat-label>
+    <mat-label>{{ 'transactions.filters.category' | transloco }}</mat-label>
     <mat-select [value]="filters().categoryId" (valueChange)="setCategory($event)">
-      <mat-option value="all">Todas as categorias</mat-option>
+      <!-- Explicit trigger: the option labels are translated asynchronously. -->
+      <mat-select-trigger>
+        {{ selectedCategoryName() ?? ('transactions.filters.allCategories' | transloco) }}
+      </mat-select-trigger>
+      <mat-option value="all">{{ 'transactions.filters.allCategories' | transloco }}</mat-option>
       @for (category of visibleCategories(); track category.id) {
         <mat-option [value]="category.id">{{ category.name }}</mat-option>
       }
@@ -40,12 +48,12 @@
       [checked]="!filters().onlySelectedMonth"
       (change)="setOnlySelectedMonth(!$event.checked)"
     >
-      Todo o período
+      {{ 'transactions.filters.wholePeriod' | transloco }}
     </mat-slide-toggle>
     @if (canClear()) {
       <button mat-button type="button" (click)="clear()">
         <mat-icon>filter_alt_off</mat-icon>
-        Limpar filtros
+        {{ 'transactions.filters.clear' | transloco }}
       </button>
     }
   </div>

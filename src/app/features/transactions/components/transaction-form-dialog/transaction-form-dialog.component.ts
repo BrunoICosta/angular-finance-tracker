@@ -16,9 +16,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { TranslocoPipe, provideTranslocoScope } from '@jsverse/transloco';
 import { Transaction, TransactionDraft, TransactionType } from '../../../../core/models';
 import { FinanceStore } from '../../../../core/state/finance.store';
-import { provideBrDateAdapter } from '../../../../shared/adapters/br-date.adapter';
+import { provideLocalizedDateAdapter } from '../../../../shared/adapters/localized-date.adapter';
 import { CategoryIconComponent } from '../../../../shared/components/category-icon/category-icon.component';
 import { fromCents, toCents } from '../../../../shared/utils/money';
 import { fromIsoDate, toIsoDate } from '../../../../shared/utils/month';
@@ -52,8 +53,10 @@ function notBlank(control: AbstractControl<string>): ValidationErrors | null {
     MatButtonToggleModule,
     MatIconModule,
     CategoryIconComponent,
+    TranslocoPipe,
   ],
-  providers: [provideBrDateAdapter()],
+  // Dialogs are created outside the route injector, so they provide their own scope.
+  providers: [provideLocalizedDateAdapter(), provideTranslocoScope('transactions')],
   templateUrl: './transaction-form-dialog.component.html',
   styleUrl: './transaction-form-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

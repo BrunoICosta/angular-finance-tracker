@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { provideTranslocoScope } from '@jsverse/transloco';
 import {
   ArcElement,
   BarController,
@@ -14,9 +15,10 @@ import { provideCharts } from 'ng2-charts';
 export const DASHBOARD_ROUTES: Routes = [
   {
     path: '',
-    title: 'Visão geral · Finanças',
+    title: 'titles.dashboard',
     // Chart.js is registered here so it ships with the dashboard chunk, not the main bundle.
     providers: [
+      provideTranslocoScope('dashboard'),
       provideCharts({
         registerables: [
           DoughnutController,

@@ -1,0 +1,70 @@
+{
+  "title": "Configurações",
+  "subtitle": "Aparência, idioma, importação e exportação de dados",
+  "appearance": {
+    "title": "Aparência e idioma",
+    "text": "Escolha o tema e o idioma da interface. As preferências ficam salvas.",
+    "theme": "Tema",
+    "language": "Idioma"
+  },
+  "export": {
+    "title": "Exportar CSV",
+    "text": {
+      "one": "Baixe a única transação em um arquivo compatível com Excel e Google Planilhas.",
+      "other": "Baixe todas as {{count}} transações em um arquivo compatível com Excel e Google Planilhas."
+    },
+    "action": "Exportar transações",
+    "filePrefix": "financas",
+    "done": "{{count}} transações exportadas."
+  },
+  "import": {
+    "title": "Importar CSV",
+    "columns": "Colunas aceitas:",
+    "help": "Separador ; ou , e datas em aaaa-mm-dd ou dd/mm/aaaa. Cabeçalhos em português ou inglês. Categorias que não existirem serão criadas.",
+    "choose": "Escolher arquivo",
+    "done": "{{count}} transações importadas.",
+    "imported": {
+      "one": "{{file}}: 1 transação importada",
+      "other": "{{file}}: {{count}} transações importadas"
+    },
+    "categoriesCreated": {
+      "one": "1 categoria criada",
+      "other": "{{count}} categorias criadas"
+    },
+    "skipped": {
+      "one": "1 linha ignorada:",
+      "other": "{{count}} linhas ignoradas:"
+    },
+    "line": "Linha {{line}}:",
+    "more": "e mais {{count}}…",
+    "fallbackIncome": "Outras receitas",
+    "fallbackExpense": "Outras despesas",
+    "errors": {
+      "tooLarge": "Arquivo muito grande. O limite é 2 MB.",
+      "unreadable": "Não foi possível ler o arquivo.",
+      "empty": "O arquivo está vazio.",
+      "missingColumns": "Colunas obrigatórias ausentes: {{columns}}.",
+      "date": "Data inválida: \"{{value}}\".",
+      "description": "Descrição vazia.",
+      "amount": "Valor inválido: \"{{value}}\".",
+      "type": "Tipo desconhecido: \"{{value}}\"."
+    }
+  },
+  "data": {
+    "title": "Dados",
+    "text": "Seus dados ficam apenas neste navegador. Limpar remove todas as transações e orçamentos e mantém as categorias padrão. Exporte um CSV antes se quiser guardar uma cópia.",
+    "clear": "Limpar dados",
+    "restore": "Restaurar dados de demonstração",
+    "clearConfirm": {
+      "title": "Limpar todos os dados?",
+      "message": "Todas as transações, orçamentos e categorias personalizadas serão apagados. Essa ação não pode ser desfeita."
+    },
+    "restoreConfirm": {
+      "title": "Restaurar dados de demonstração?",
+      "message": "Seus dados atuais serão substituídos pelos dados de exemplo.",
+      "confirm": "Restaurar"
+    },
+    "cleared": "Dados apagados. Comece do zero!",
+    "restored": "Dados de demonstração restaurados."
+  }
+}

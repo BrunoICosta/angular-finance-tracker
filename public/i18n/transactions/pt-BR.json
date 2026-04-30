@@ -1,0 +1,68 @@
+{
+  "title": "Transações",
+  "subtitle": "Filtre, ordene e edite suas movimentações",
+  "new": "Nova transação",
+  "balance": "Saldo",
+  "pagination": "Paginação das transações",
+  "results": {
+    "one": "1 transação",
+    "other": "{{count}} transações"
+  },
+  "filters": {
+    "label": "Filtrar transações",
+    "search": "Buscar",
+    "searchPlaceholder": "Descrição, observação ou categoria",
+    "type": "Tipo",
+    "all": "Todas",
+    "category": "Categoria",
+    "allCategories": "Todas as categorias",
+    "wholePeriod": "Todo o período",
+    "clear": "Limpar filtros"
+  },
+  "table": {
+    "caption": "Lista de transações",
+    "date": "Data",
+    "description": "Descrição",
+    "category": "Categoria",
+    "amount": "Valor",
+    "actions": "Ações"
+  },
+  "empty": {
+    "noMatchTitle": "Nada encontrado",
+    "noMatchMessage": "Nenhuma transação corresponde aos filtros aplicados.",
+    "noneTitle": "Nenhuma transação por aqui",
+    "noneMessage": "Adicione sua primeira receita ou despesa."
+  },
+  "form": {
+    "newTitle": "Nova transação",
+    "editTitle": "Editar transação",
+    "type": "Tipo da transação",
+    "description": "Descrição",
+    "amount": "Valor",
+    "amountPlaceholder": "0,00",
+    "date": "Data",
+    "category": "Categoria",
+    "notes": "Observações (opcional)",
+    "add": "Adicionar",
+    "saveChanges": "Salvar alterações",
+    "errors": {
+      "description": "Informe uma descrição.",
+      "amountRequired": "Informe o valor.",
+      "amountMin": "O valor deve ser maior que zero.",
+      "amountMax": "Valor acima do limite permitido.",
+      "dateInvalid": "Data inválida. Use dd/mm/aaaa.",
+      "dateRequired": "Informe a data.",
+      "category": "Escolha uma categoria."
+    }
+  },
+  "delete": {
+    "title": "Excluir transação?",
+    "message": "\"{{name}}\" será removida permanentemente."
+  },
+  "toast": {
+    "incomeAdded": "Receita adicionada.",
+    "expenseAdded": "Despesa adicionada.",
+    "updated": "Transação atualizada.",
+    "deleted": "Transação excluída."
+  }
+}

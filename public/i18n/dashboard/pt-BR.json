@@ -1,0 +1,53 @@
+{
+  "title": "Visão geral",
+  "subtitle": "Seu mês em um relance",
+  "loadingChart": "Carregando gráfico",
+  "summary": {
+    "label": "Resumo do mês",
+    "balance": "Saldo do mês",
+    "income": "Receitas",
+    "expenses": "Despesas",
+    "transactionsInMonth": {
+      "one": "1 transação no mês",
+      "other": "{{count}} transações no mês"
+    },
+    "noPrevious": "Sem dados no mês anterior",
+    "samePrevious": "Igual ao mês anterior",
+    "up": "▲ {{percent}}% vs. mês anterior",
+    "down": "▼ {{percent}}% vs. mês anterior"
+  },
+  "expensesByCategory": {
+    "title": "Despesas por categoria",
+    "caption": "em despesas",
+    "emptyTitle": "Sem despesas neste mês",
+    "emptyMessage": "Quando houver despesas, a distribuição por categoria aparece aqui.",
+    "aria": "Despesas por categoria: {{items}}"
+  },
+  "monthly": {
+    "title": "Receitas x despesas",
+    "subtitle": "Últimos {{count}} meses",
+    "emptyTitle": "Sem histórico ainda",
+    "emptyMessage": "Os totais mensais aparecem aqui conforme você registra transações.",
+    "aria": "Receitas e despesas por mês: {{items}}"
+  },
+  "recent": {
+    "title": "Últimas transações",
+    "seeAll": "Ver todas",
+    "emptyTitle": "Nenhuma transação neste mês",
+    "emptyMessage": "Registre receitas e despesas para acompanhar seu saldo."
+  },
+  "alerts": {
+    "title": "Alertas de orçamento",
+    "seeBudgets": "Ver orçamentos",
+    "over": {
+      "one": "1 acima do limite",
+      "other": "{{count}} acima do limite"
+    },
+    "warning": {
+      "one": "1 perto do limite",
+      "other": "{{count}} perto do limite"
+    },
+    "overDetail": "Passou {{amount}} do limite de {{limit}}",
+    "warningDetail": "Restam {{amount}} de {{limit}}"
+  }
+}

@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,7 +8,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Category, Transaction } from '../../../../core/models';
 import { CategoryIconComponent } from '../../../../shared/components/category-icon/category-icon.component';
 import { BrlPipe } from '../../../../shared/pipes/brl.pipe';
-import { IsoDatePipe } from '../../../../shared/pipes/iso-date.pipe';
+import { TranslocoPipe } from '@jsverse/transloco';
+import { LocalDatePipe } from '../../../../shared/pipes/local-date.pipe';
 import { SortField, TransactionSort } from '../../data-access/transaction-query';
 
 const ALL_COLUMNS = ['date', 'description', 'category', 'amount', 'actions'] as const;
@@ -18,7 +18,8 @@ const COMPACT_COLUMNS = ['description', 'amount', 'actions'] as const;
 @Component({
   selector: 'app-transactions-table',
   imports: [
-    DatePipe,
+    LocalDatePipe,
+    TranslocoPipe,
     MatTableModule,
     MatButtonModule,
     MatIconModule,
@@ -26,7 +27,6 @@ const COMPACT_COLUMNS = ['description', 'amount', 'actions'] as const;
     MatSortModule,
     MatTooltipModule,
     BrlPipe,
-    IsoDatePipe,
     CategoryIconComponent,
   ],
   templateUrl: './transactions-table.component.html',

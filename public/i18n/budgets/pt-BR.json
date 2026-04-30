@@ -1,0 +1,41 @@
+{
+  "title": "Orçamentos",
+  "subtitle": "Limites mensais de gasto por categoria",
+  "of": "de {{limit}}",
+  "unbudgeted": "Sem orçamento",
+  "setBudget": "Definir orçamento",
+  "overview": {
+    "label": "Resumo dos orçamentos",
+    "spent": "Gasto nas categorias com orçamento",
+    "usage": "Consumo total dos orçamentos",
+    "overCount": {
+      "one": "1 categoria passou do limite neste mês.",
+      "other": "{{count}} categorias passaram do limite neste mês."
+    }
+  },
+  "empty": {
+    "title": "Nenhum orçamento definido",
+    "message": "Defina limites mensais para acompanhar seus gastos por categoria."
+  },
+  "row": {
+    "usage": "Consumo do orçamento de {{name}}",
+    "over": "Estourou em {{amount}}",
+    "left": "Restam {{amount}}",
+    "edit": "Editar orçamento de {{name}}"
+  },
+  "dialog": {
+    "title": "Orçamento · {{name}}",
+    "intro": "Defina quanto pretende gastar por mês nesta categoria.",
+    "limit": "Limite mensal",
+    "average": "Média dos últimos meses: {{amount}}",
+    "remove": "Remover",
+    "errors": {
+      "required": "Informe o limite.",
+      "min": "O limite deve ser maior que zero."
+    }
+  },
+  "toast": {
+    "saved": "Orçamento de {{name}} salvo.",
+    "removed": "Orçamento de {{name}} removido."
+  }
+}

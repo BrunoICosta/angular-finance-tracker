@@ -1,34 +1,37 @@
-<app-page-header title="Transações" subtitle="Filtre, ordene e edite suas movimentações">
+<app-page-header
+  [title]="'transactions.title' | transloco"
+  [subtitle]="'transactions.subtitle' | transloco"
+>
   @if (filters().onlySelectedMonth) {
     <app-month-navigator actions />
   }
   <button mat-flat-button type="button" actions (click)="dialogs.create()">
     <mat-icon>add</mat-icon>
-    Nova transação
+    {{ 'transactions.new' | transloco }}
   </button>
 </app-page-header>
 
-<section class="panel panel--filters" aria-label="Filtros">
+<section class="panel panel--filters" [attr.aria-label]="'transactions.filters.label' | transloco">
   <app-transaction-filters [(filters)]="filters" [categories]="store.categories()" />
 </section>
 
 <section class="panel" aria-labelledby="results-title">
   <header class="results">
     <h2 id="results-title" class="results__title" aria-live="polite">
-      {{ filtered().length }} {{ filtered().length === 1 ? 'transação' : 'transações' }}
+      {{ resultsTitle().key | transloco: resultsTitle().params }}
     </h2>
     @if (filtered().length) {
       <dl class="results__totals">
         <div>
-          <dt>Receitas</dt>
+          <dt>{{ 'common.type.incomePlural' | transloco }}</dt>
           <dd class="text-income tabular">{{ totals().incomeCents | brl }}</dd>
         </div>
         <div>
-          <dt>Despesas</dt>
+          <dt>{{ 'common.type.expensePlural' | transloco }}</dt>
           <dd class="text-expense tabular">{{ totals().expenseCents | brl }}</dd>
         </div>
         <div>
-          <dt>Saldo</dt>
+          <dt>{{ 'transactions.balance' | transloco }}</dt>
           <dd class="tabular">{{ totals().balanceCents | brl }}</dd>
         </div>
       </dl>
@@ -52,25 +55,27 @@
       [pageSizeOptions]="pageSizeOptions"
       [hidePageSize]="isHandset()"
       (page)="onPage($event)"
-      aria-label="Paginação das transações"
+      [attr.aria-label]="'transactions.pagination' | transloco"
     />
   } @else if (isFiltering()) {
     <app-empty-state
       icon="search_off"
-      title="Nada encontrado"
-      message="Nenhuma transação corresponde aos filtros aplicados."
+      [title]="'transactions.empty.noMatchTitle' | transloco"
+      [message]="'transactions.empty.noMatchMessage' | transloco"
     >
-      <button mat-stroked-button type="button" (click)="clearFilters()">Limpar filtros</button>
+      <button mat-stroked-button type="button" (click)="clearFilters()">
+        {{ 'transactions.filters.clear' | transloco }}
+      </button>
     </app-empty-state>
   } @else {
     <app-empty-state
       icon="receipt_long"
-      title="Nenhuma transação por aqui"
-      message="Adicione sua primeira receita ou despesa."
+      [title]="'transactions.empty.noneTitle' | transloco"
+      [message]="'transactions.empty.noneMessage' | transloco"
     >
       <button mat-stroked-button type="button" (click)="dialogs.create()">
         <mat-icon>add</mat-icon>
-        Nova transação
+        {{ 'transactions.new' | transloco }}
       </button>
     </app-empty-state>
   }

@@ -1,0 +1,68 @@
+{
+  "title": "Transactions",
+  "subtitle": "Filter, sort and edit your entries",
+  "new": "New transaction",
+  "balance": "Balance",
+  "pagination": "Transactions pagination",
+  "results": {
+    "one": "1 transaction",
+    "other": "{{count}} transactions"
+  },
+  "filters": {
+    "label": "Filter transactions",
+    "search": "Search",
+    "searchPlaceholder": "Description, notes or category",
+    "type": "Type",
+    "all": "All",
+    "category": "Category",
+    "allCategories": "All categories",
+    "wholePeriod": "All time",
+    "clear": "Clear filters"
+  },
+  "table": {
+    "caption": "Transactions list",
+    "date": "Date",
+    "description": "Description",
+    "category": "Category",
+    "amount": "Amount",
+    "actions": "Actions"
+  },
+  "empty": {
+    "noMatchTitle": "Nothing found",
+    "noMatchMessage": "No transaction matches the current filters.",
+    "noneTitle": "No transactions here",
+    "noneMessage": "Add your first income or expense."
+  },
+  "form": {
+    "newTitle": "New transaction",
+    "editTitle": "Edit transaction",
+    "type": "Transaction type",
+    "description": "Description",
+    "amount": "Amount",
+    "amountPlaceholder": "0.00",
+    "date": "Date",
+    "category": "Category",
+    "notes": "Notes (optional)",
+    "add": "Add",
+    "saveChanges": "Save changes",
+    "errors": {
+      "description": "Enter a description.",
+      "amountRequired": "Enter the amount.",
+      "amountMin": "The amount must be greater than zero.",
+      "amountMax": "Amount above the allowed limit.",
+      "dateInvalid": "Invalid date. Use mm/dd/yyyy.",
+      "dateRequired": "Enter the date.",
+      "category": "Choose a category."
+    }
+  },
+  "delete": {
+    "title": "Delete transaction?",
+    "message": "\"{{name}}\" will be permanently removed."
+  },
+  "toast": {
+    "incomeAdded": "Income added.",
+    "expenseAdded": "Expense added.",
+    "updated": "Transaction updated.",
+    "deleted": "Transaction deleted."
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "title": "Budgets",
+  "subtitle": "Monthly spending limits per category",
+  "of": "of {{limit}}",
+  "unbudgeted": "No budget",
+  "setBudget": "Set budget",
+  "overview": {
+    "label": "Budgets summary",
+    "spent": "Spent in budgeted categories",
+    "usage": "Total budget usage",
+    "overCount": {
+      "one": "1 category went over its limit this month.",
+      "other": "{{count}} categories went over their limit this month."
+    }
+  },
+  "empty": {
+    "title": "No budgets yet",
+    "message": "Set monthly limits to keep track of your spending per category."
+  },
+  "row": {
+    "usage": "{{name}} budget usage",
+    "over": "{{amount}} over",
+    "left": "{{amount}} left",
+    "edit": "Edit {{name}} budget"
+  },
+  "dialog": {
+    "title": "Budget · {{name}}",
+    "intro": "Set how much you plan to spend per month in this category.",
+    "limit": "Monthly limit",
+    "average": "Average of recent months: {{amount}}",
+    "remove": "Remove",
+    "errors": {
+      "required": "Enter the limit.",
+      "min": "The limit must be greater than zero."
+    }
+  },
+  "toast": {
+    "saved": "{{name}} budget saved.",
+    "removed": "{{name}} budget removed."
+  }
+}

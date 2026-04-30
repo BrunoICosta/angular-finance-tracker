@@ -1,32 +1,37 @@
-<app-page-header title="Visão geral" subtitle="Seu mês em um relance">
+<app-page-header
+  [title]="'dashboard.title' | transloco"
+  [subtitle]="'dashboard.subtitle' | transloco"
+>
   <app-month-navigator actions />
 </app-page-header>
 
-<section class="summary" aria-label="Resumo do mês">
+<section class="summary" [attr.aria-label]="'dashboard.summary.label' | transloco">
   <app-summary-card
-    label="Saldo do mês"
     tone="balance"
+    [label]="'dashboard.summary.balance' | transloco"
     [valueCents]="summary().balanceCents"
-    [hint]="balanceHint()"
+    [hint]="balanceHint().key | transloco: balanceHint().params"
   />
   <app-summary-card
-    label="Receitas"
     tone="income"
+    [label]="'dashboard.summary.income' | transloco"
     [valueCents]="summary().incomeCents"
-    [hint]="incomeHint()"
+    [hint]="incomeHint().key | transloco: incomeHint().params"
   />
   <app-summary-card
-    label="Despesas"
     tone="expense"
+    [label]="'dashboard.summary.expenses' | transloco"
     [valueCents]="summary().expenseCents"
-    [hint]="expenseHint()"
+    [hint]="expenseHint().key | transloco: expenseHint().params"
   />
 </section>
 
 <div class="grid">
   <section class="panel" aria-labelledby="expenses-title">
     <header class="panel__header">
-      <h2 id="expenses-title" class="panel__title">Despesas por categoria</h2>
+      <h2 id="expenses-title" class="panel__title">
+        {{ 'dashboard.expensesByCategory.title' | transloco }}
+      </h2>
     </header>
     @if (expensesByCategory().length) {
       @defer (on viewport) {
@@ -34,13 +39,17 @@
       } @placeholder {
         <div class="chart-skeleton" aria-hidden="true"></div>
       } @loading (minimum 200ms) {
-        <div class="chart-skeleton" role="status" aria-label="Carregando gráfico"></div>
+        <div
+          class="chart-skeleton"
+          role="status"
+          [attr.aria-label]="'dashboard.loadingChart' | transloco"
+        ></div>
       }
     } @else {
       <app-empty-state
         icon="donut_large"
-        title="Sem despesas neste mês"
-        message="Quando houver despesas, a distribuição por categoria aparece aqui."
+        [title]="'dashboard.expensesByCategory.emptyTitle' | transloco"
+        [message]="'dashboard.expensesByCategory.emptyMessage' | transloco"
       />
     }
   </section>
@@ -48,8 +57,12 @@
   <section class="panel" aria-labelledby="monthly-title">
     <header class="panel__header">
       <div>
-        <h2 id="monthly-title" class="panel__title">Receitas x despesas</h2>
-        <p class="panel__subtitle">Últimos {{ historyMonths }} meses</p>
+        <h2 id="monthly-title" class="panel__title">
+          {{ 'dashboard.monthly.title' | transloco }}
+        </h2>
+        <p class="panel__subtitle">
+          {{ 'dashboard.monthly.subtitle' | transloco: { count: historyMonths } }}
+        </p>
       </div>
     </header>
     @if (hasHistory()) {
@@ -61,30 +74,32 @@
         <div
           class="chart-skeleton chart-skeleton--tall"
           role="status"
-          aria-label="Carregando gráfico"
+          [attr.aria-label]="'dashboard.loadingChart' | transloco"
         ></div>
       }
     } @else {
       <app-empty-state
         icon="bar_chart"
-        title="Sem histórico ainda"
-        message="Os totais mensais aparecem aqui conforme você registra transações."
+        [title]="'dashboard.monthly.emptyTitle' | transloco"
+        [message]="'dashboard.monthly.emptyMessage' | transloco"
       />
     }
   </section>
 
   <section class="panel panel--recent" aria-labelledby="recent-title">
     <header class="panel__header">
-      <h2 id="recent-title" class="panel__title">Últimas transações</h2>
-      <a mat-button routerLink="/transacoes">Ver todas</a>
+      <h2 id="recent-title" class="panel__title">
+        {{ 'dashboard.recent.title' | transloco }}
+      </h2>
+      <a mat-button routerLink="/transacoes">{{ 'dashboard.recent.seeAll' | transloco }}</a>
     </header>
     @if (recent().length) {
       <app-recent-transactions [transactions]="recent()" />
     } @else {
       <app-empty-state
         icon="receipt_long"
-        title="Nenhuma transação neste mês"
-        message="Registre receitas e despesas para acompanhar seu saldo."
+        [title]="'dashboard.recent.emptyTitle' | transloco"
+        [message]="'dashboard.recent.emptyMessage' | transloco"
       />
     }
   </section>
@@ -93,10 +108,16 @@
     <section class="panel panel--alerts" aria-labelledby="alerts-title">
       <header class="panel__header">
         <div>
-          <h2 id="alerts-title" class="panel__title">Alertas de orçamento</h2>
-          <p class="panel__subtitle">{{ alertsSummary() }}</p>
+          <h2 id="alerts-title" class="panel__title">
+            {{ 'dashboard.alerts.title' | transloco }}
+          </h2>
+          <p class="panel__subtitle">
+            @for (part of alertsSummary(); track part.key; let last = $last) {
+              {{ part.key | transloco: part.params }}{{ last ? '' : ' · ' }}
+            }
+          </p>
         </div>
-        <a mat-button routerLink="/orcamentos">Ver orçamentos</a>
+        <a mat-button routerLink="/orcamentos">{{ 'dashboard.alerts.seeBudgets' | transloco }}</a>
       </header>
       <app-budget-alerts [alerts]="alerts()" />
     </section>

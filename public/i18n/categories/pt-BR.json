@@ -1,0 +1,93 @@
+{
+  "title": "Categorias",
+  "subtitle": "Organize suas transações com cores e ícones",
+  "new": "Nova categoria",
+  "create": "Criar categoria",
+  "addTo": {
+    "expense": "Adicionar em despesas",
+    "income": "Adicionar em receitas"
+  },
+  "usage": {
+    "none": "Nenhuma transação",
+    "one": "1 transação",
+    "other": "{{count}} transações"
+  },
+  "empty": {
+    "title": "Nenhuma categoria",
+    "message": {
+      "expense": "Crie categorias de despesas para classificar.",
+      "income": "Crie categorias de receitas para classificar."
+    }
+  },
+  "form": {
+    "newTitle": "Nova categoria",
+    "editTitle": "Editar categoria",
+    "namePlaceholder": "Nome da categoria",
+    "type": "Tipo da categoria",
+    "typeLocked": "O tipo não pode ser alterado porque a categoria já possui transações.",
+    "name": "Nome",
+    "color": "Cor",
+    "customColor": "Cor personalizada",
+    "icon": "Ícone",
+    "errors": {
+      "name": "Informe um nome.",
+      "duplicate": "Já existe uma categoria com esse nome."
+    }
+  },
+  "delete": {
+    "title": "Excluir categoria?",
+    "message": "\"{{name}}\" e o orçamento associado serão removidos."
+  },
+  "toast": {
+    "created": "Categoria \"{{name}}\" criada.",
+    "updated": "Categoria atualizada.",
+    "deleted": "Categoria excluída.",
+    "inUse": "\"{{name}}\" possui {{count}} transação(ões). Mova ou exclua-as antes de remover a categoria."
+  },
+  "colors": {
+    "violet": "Violeta",
+    "purple": "Roxo",
+    "pink": "Rosa",
+    "red": "Vermelho",
+    "orange": "Laranja",
+    "mustard": "Mostarda",
+    "green": "Verde",
+    "teal": "Turquesa",
+    "petrol": "Azul-petróleo",
+    "blue": "Azul",
+    "slate": "Cinza-azulado",
+    "gray": "Cinza"
+  },
+  "icons": {
+    "payments": "Pagamentos",
+    "work": "Trabalho",
+    "trending_up": "Investimentos",
+    "savings": "Poupança",
+    "card_giftcard": "Presente",
+    "home": "Casa",
+    "restaurant": "Restaurante",
+    "shopping_cart": "Mercado",
+    "directions_car": "Carro",
+    "directions_bus": "Ônibus",
+    "local_gas_station": "Combustível",
+    "favorite": "Saúde",
+    "medication": "Remédios",
+    "fitness_center": "Academia",
+    "sports_esports": "Jogos",
+    "movie": "Cinema",
+    "flight": "Viagem",
+    "school": "Educação",
+    "menu_book": "Livros",
+    "subscriptions": "Assinaturas",
+    "wifi": "Internet",
+    "bolt": "Energia",
+    "water_drop": "Água",
+    "shopping_bag": "Compras",
+    "checkroom": "Roupas",
+    "pets": "Pets",
+    "child_care": "Filhos",
+    "receipt_long": "Contas",
+    "account_balance": "Banco",
+    "more_horiz": "Outros"
+  }
+}

@@ -23,7 +23,9 @@ export class TransactionDialogService {
     if (draft) {
       this.store.addTransaction(draft);
       this.notifications.success(
-        draft.type === 'income' ? 'Receita adicionada.' : 'Despesa adicionada.',
+        draft.type === 'income'
+          ? 'transactions.toast.incomeAdded'
+          : 'transactions.toast.expenseAdded',
       );
     }
   }
@@ -32,22 +34,23 @@ export class TransactionDialogService {
     const draft = await this.open({ transaction });
     if (draft) {
       this.store.updateTransaction(transaction.id, draft);
-      this.notifications.success('Transação atualizada.');
+      this.notifications.success('transactions.toast.updated');
     }
   }
 
   async remove(transaction: Transaction): Promise<void> {
     const confirmed = await this.confirmDialog.confirm({
-      title: 'Excluir transação?',
-      message: `"${transaction.description}" será removida permanentemente.`,
-      confirmLabel: 'Excluir',
+      title: 'transactions.delete.title',
+      message: 'transactions.delete.message',
+      params: { name: transaction.description },
+      confirmLabel: 'common.delete',
       destructive: true,
     });
     if (!confirmed) {
       return;
     }
     this.store.removeTransaction(transaction.id);
-    const undo = await this.notifications.withAction('Transação excluída.', 'Desfazer');
+    const undo = await this.notifications.withAction('transactions.toast.deleted', 'common.undo');
     if (undo) {
       this.store.restoreTransaction(transaction);
     }

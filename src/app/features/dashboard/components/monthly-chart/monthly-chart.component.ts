@@ -1,25 +1,23 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  LOCALE_ID,
-  computed,
-  inject,
-  input,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { ChartConfiguration } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
+import { translateSignal } from '@jsverse/transloco';
+import { LanguageService } from '../../../../core/i18n/language.service';
 import { MonthlyTotals } from '../../../../core/domain/finance-calculations';
 import { formatBrl, fromCents } from '../../../../shared/utils/money';
 import { monthStart } from '../../../../shared/utils/month';
 import { CHART_FONT, injectChartPalette } from '../../data-access/chart-theme';
 
-const COMPACT_BRL = new Intl.NumberFormat('pt-BR', {
-  style: 'currency',
-  currency: 'BRL',
-  notation: 'compact',
-  maximumFractionDigits: 1,
-});
+/** Axis labels like `R$ 8 mil` / `R$8K`. */
+function compactBrl(locale: string): Intl.NumberFormat {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: 'BRL',
+    notation: 'compact',
+    maximumFractionDigits: 1,
+  });
+}
 
 /** Grouped bars comparing income and expenses month by month. */
 @Component({
@@ -48,24 +46,28 @@ const COMPACT_BRL = new Intl.NumberFormat('pt-BR', {
 export class MonthlyChartComponent {
   readonly months = input.required<readonly MonthlyTotals[]>();
 
-  private readonly locale = inject(LOCALE_ID);
+  private readonly locale = inject(LanguageService).locale;
+  private readonly incomeLabel = translateSignal('summary.income', {}, 'dashboard');
+  private readonly expenseLabel = translateSignal('summary.expenses', {}, 'dashboard');
   private readonly palette = injectChartPalette();
 
   private readonly labels = computed(() =>
     this.months().map((item) =>
-      formatDate(monthStart(item.month), 'MMM/yy', this.locale).replace('.', ''),
+      formatDate(monthStart(item.month), 'MMM/yy', this.locale()).replace('.', ''),
     ),
   );
 
-  protected readonly ariaLabel = computed(
-    () =>
-      'Receitas e despesas por mês: ' +
-      this.months()
+  protected readonly ariaLabel = translateSignal(
+    'monthly.aria',
+    computed(() => ({
+      items: this.months()
         .map(
           (item, index) =>
-            `${this.labels()[index]}: receitas ${formatBrl(item.incomeCents)}, despesas ${formatBrl(item.expenseCents)}`,
+            `${this.labels()[index]}: ${this.incomeLabel()} ${formatBrl(item.incomeCents, this.locale())}, ${this.expenseLabel()} ${formatBrl(item.expenseCents, this.locale())}`,
         )
         .join('; '),
+    })),
+    'dashboard',
   );
 
   protected readonly data = computed<ChartConfiguration<'bar'>['data']>(() => {
@@ -74,14 +76,14 @@ export class MonthlyChartComponent {
       labels: this.labels(),
       datasets: [
         {
-          label: 'Receitas',
+          label: this.incomeLabel(),
           data: this.months().map((item) => fromCents(item.incomeCents)),
           backgroundColor: palette.income,
           borderRadius: 6,
           maxBarThickness: 28,
         },
         {
-          label: 'Despesas',
+          label: this.expenseLabel(),
           data: this.months().map((item) => fromCents(item.expenseCents)),
           backgroundColor: palette.expense,
           borderRadius: 6,
@@ -93,7 +95,10 @@ export class MonthlyChartComponent {
 
   protected readonly options = computed<ChartConfiguration<'bar'>['options']>(() => {
     const palette = this.palette();
+    const locale = this.locale();
+    const axisFormat = compactBrl(locale);
     return {
+      locale,
       responsive: true,
       maintainAspectRatio: false,
       interaction: { mode: 'index', intersect: false },
@@ -111,7 +116,7 @@ export class MonthlyChartComponent {
             color: palette.mutedText,
             font: CHART_FONT,
             maxTicksLimit: 6,
-            callback: (value) => COMPACT_BRL.format(Number(value)),
+            callback: (value) => axisFormat.format(Number(value)),
           },
         },
       },
@@ -129,7 +134,7 @@ export class MonthlyChartComponent {
           bodyFont: CHART_FONT,
           callbacks: {
             label: (context) =>
-              ` ${context.dataset.label}: ${formatBrl(Math.round((context.parsed.y ?? 0) * 100))}`,
+              ` ${context.dataset.label}: ${formatBrl(Math.round((context.parsed.y ?? 0) * 100), locale)}`,
           },
         },
       },

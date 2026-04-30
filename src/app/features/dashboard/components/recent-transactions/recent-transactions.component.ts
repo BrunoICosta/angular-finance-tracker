@@ -1,14 +1,14 @@
-import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { Transaction } from '../../../../core/models';
 import { FinanceStore } from '../../../../core/state/finance.store';
 import { CategoryIconComponent } from '../../../../shared/components/category-icon/category-icon.component';
 import { BrlPipe } from '../../../../shared/pipes/brl.pipe';
-import { IsoDatePipe } from '../../../../shared/pipes/iso-date.pipe';
+import { TranslocoPipe } from '@jsverse/transloco';
+import { LocalDatePipe } from '../../../../shared/pipes/local-date.pipe';
 
 @Component({
   selector: 'app-recent-transactions',
-  imports: [DatePipe, BrlPipe, IsoDatePipe, CategoryIconComponent],
+  imports: [LocalDatePipe, BrlPipe, CategoryIconComponent, TranslocoPipe],
   template: `
     <ul class="recent" role="list">
       @for (transaction of transactions(); track transaction.id) {
@@ -21,8 +21,8 @@ import { IsoDatePipe } from '../../../../shared/pipes/iso-date.pipe';
           <div class="recent__text">
             <span class="recent__description">{{ transaction.description }}</span>
             <span class="recent__meta"
-              >{{ category?.name ?? 'Sem categoria' }} ·
-              {{ transaction.date | isoDate | date: 'dd MMM' }}</span
+              >{{ category?.name ?? ('common.noCategory' | transloco) }} ·
+              {{ transaction.date | localDate: 'd MMM' }}</span
             >
           </div>
           <span

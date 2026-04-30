@@ -1,4 +1,6 @@
-<button type="button" class="skip-link" (click)="skipToContent(main)">Pular para o conteúdo</button>
+<button type="button" class="skip-link" (click)="skipToContent(main)">
+  {{ 'shell.skipToContent' | transloco }}
+</button>
 
 <mat-sidenav-container class="shell">
   <mat-sidenav
@@ -8,13 +10,13 @@
     [opened]="!isHandset()"
     [fixedInViewport]="isHandset()"
     [attr.role]="isHandset() ? 'dialog' : 'navigation'"
-    aria-label="Menu principal"
+    [attr.aria-label]="'shell.mainMenu' | transloco"
   >
     <div class="brand">
       <span class="brand__logo" aria-hidden="true">
         <mat-icon>account_balance_wallet</mat-icon>
       </span>
-      <span class="brand__name">Finanças</span>
+      <span class="brand__name">{{ 'titles.app' | transloco }}</span>
     </div>
 
     <mat-nav-list>
@@ -29,29 +31,35 @@
           (click)="onNavigate()"
         >
           <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-          <span matListItemTitle>{{ item.label }}</span>
+          <span matListItemTitle>{{ item.label | transloco }}</span>
         </a>
       }
     </mat-nav-list>
 
-    <p class="shell__footnote">Dados salvos apenas neste navegador.</p>
+    <p class="shell__footnote">{{ 'shell.localOnly' | transloco }}</p>
   </mat-sidenav>
 
   <mat-sidenav-content class="shell__content">
     <mat-toolbar class="topbar">
       @if (isHandset()) {
-        <button mat-icon-button type="button" aria-label="Abrir menu" (click)="drawer.toggle()">
+        <button
+          mat-icon-button
+          type="button"
+          [attr.aria-label]="'shell.openMenu' | transloco"
+          (click)="drawer.toggle()"
+        >
           <mat-icon>menu</mat-icon>
         </button>
-        <span class="topbar__title">Finanças</span>
+        <span class="topbar__title">{{ 'titles.app' | transloco }}</span>
       }
       <span class="topbar__spacer"></span>
+      <app-language-switcher />
       <button
         mat-icon-button
         type="button"
         (click)="theme.toggle()"
-        [attr.aria-label]="theme.isDark() ? 'Ativar tema claro' : 'Ativar tema escuro'"
-        [matTooltip]="theme.isDark() ? 'Tema claro' : 'Tema escuro'"
+        [attr.aria-label]="(theme.isDark() ? 'theme.enableLight' : 'theme.enableDark') | transloco"
+        [matTooltip]="(theme.isDark() ? 'theme.light' : 'theme.dark') | transloco"
       >
         <mat-icon>{{ theme.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
       </button>
@@ -62,18 +70,20 @@
         @case ('loading') {
           <div class="state" role="status">
             <mat-spinner diameter="40" />
-            <p>Carregando seus dados…</p>
+            <p>{{ 'shell.loading' | transloco }}</p>
           </div>
         }
         @case ('error') {
           <div class="state state--error" role="alert">
             <mat-icon class="state__icon">error</mat-icon>
-            <h1>Não foi possível carregar seus dados</h1>
-            <p>{{ store.loadError() }}</p>
+            <h1>{{ 'shell.loadError.title' | transloco }}</h1>
+            <p>{{ 'shell.loadError.message' | transloco }}</p>
             <div class="state__actions">
-              <button mat-flat-button type="button" (click)="store.load()">Tentar novamente</button>
+              <button mat-flat-button type="button" (click)="store.load()">
+                {{ 'shell.loadError.retry' | transloco }}
+              </button>
               <button mat-stroked-button type="button" (click)="store.reset()">
-                Redefinir dados
+                {{ 'shell.loadError.reset' | transloco }}
               </button>
             </div>
           </div>

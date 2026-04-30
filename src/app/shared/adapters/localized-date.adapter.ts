@@ -1,4 +1,4 @@
-import { Injectable, Provider } from '@angular/core';
+import { Injectable, Provider, inject } from '@angular/core';
 import {
   DateAdapter,
   MAT_DATE_FORMATS,
@@ -6,19 +6,22 @@ import {
   MatDateFormats,
   NativeDateAdapter,
 } from '@angular/material/core';
+import { LanguageService } from '../../core/i18n/language.service';
 
 /**
- * `NativeDateAdapter` relies on `Date.parse`, which reads `03/04/2026` as March 4th.
- * This adapter understands the Brazilian `dd/MM/yyyy` format typed in the input.
+ * `NativeDateAdapter` relies on `Date.parse`, which reads `03/04/2026` as March 4th no matter
+ * the language. This adapter parses typed dates in the order of the active locale:
+ * `dd/MM/yyyy` for pt-BR and `MM/dd/yyyy` for English.
  */
 @Injectable()
-export class BrDateAdapter extends NativeDateAdapter {
+export class LocalizedDateAdapter extends NativeDateAdapter {
   override parse(value: unknown, parseFormat?: unknown): Date | null {
     if (typeof value === 'string') {
       const match = /^\s*(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})\s*$/.exec(value);
       if (match) {
-        const day = Number(match[1]);
-        const month = Number(match[2]) - 1;
+        const monthFirst = this.locale.toLowerCase().startsWith('en');
+        const day = Number(monthFirst ? match[2] : match[1]);
+        const month = Number(monthFirst ? match[1] : match[2]) - 1;
         const year = match[3].length === 2 ? 2000 + Number(match[3]) : Number(match[3]);
         const date = new Date(year, month, day);
         const isRealDate =
@@ -34,15 +37,15 @@ export class BrDateAdapter extends NativeDateAdapter {
 
   override format(date: Date, displayFormat: object): string {
     if (!this.isValid(date)) {
-      throw new Error('BrDateAdapter: cannot format invalid date.');
+      throw new Error('LocalizedDateAdapter: cannot format invalid date.');
     }
-    return new Intl.DateTimeFormat('pt-BR', { ...displayFormat, timeZone: 'UTC' }).format(
+    return new Intl.DateTimeFormat(this.locale, { ...displayFormat, timeZone: 'UTC' }).format(
       Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
     );
   }
 }
 
-export const BR_DATE_FORMATS: MatDateFormats = {
+export const LOCALIZED_DATE_FORMATS: MatDateFormats = {
   parse: { dateInput: null },
   display: {
     dateInput: { year: 'numeric', month: '2-digit', day: '2-digit' },
@@ -52,11 +55,11 @@ export const BR_DATE_FORMATS: MatDateFormats = {
   },
 };
 
-/** Date picker providers for pt-BR; add them where a `mat-datepicker` is used. */
-export function provideBrDateAdapter(): Provider[] {
+/** Date picker providers using the active UI locale; add them where a `mat-datepicker` is used. */
+export function provideLocalizedDateAdapter(): Provider[] {
   return [
-    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
-    { provide: DateAdapter, useClass: BrDateAdapter },
-    { provide: MAT_DATE_FORMATS, useValue: BR_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useFactory: () => inject(LanguageService).locale() },
+    { provide: DateAdapter, useClass: LocalizedDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: LOCALIZED_DATE_FORMATS },
   ];
 }

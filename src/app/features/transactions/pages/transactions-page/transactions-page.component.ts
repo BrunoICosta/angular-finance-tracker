@@ -9,12 +9,14 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { summarize } from '../../../../core/domain/finance-calculations';
 import { FinanceStore } from '../../../../core/state/finance.store';
 import { SelectedMonthStore } from '../../../../core/state/selected-month.store';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
 import { MonthNavigatorComponent } from '../../../../shared/components/month-navigator/month-navigator.component';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { plural } from '../../../../shared/i18n/translated-text';
 import { BrlPipe } from '../../../../shared/pipes/brl.pipe';
 import { HANDSET_QUERY, injectMediaQuery } from '../../../../shared/utils/responsive';
 import { TransactionFiltersComponent } from '../../components/transaction-filters/transaction-filters.component';
@@ -45,6 +47,7 @@ export const PAGE_SIZE_OPTIONS = [10, 25, 50] as const;
     TransactionFiltersComponent,
     TransactionsTableComponent,
     BrlPipe,
+    TranslocoPipe,
   ],
   templateUrl: './transactions-page.component.html',
   styleUrl: './transactions-page.component.scss',
@@ -95,6 +98,9 @@ export class TransactionsPageComponent {
     paginate(this.sorted(), this.currentPage(), this.pageSize()),
   );
   protected readonly totals = computed(() => summarize(this.filtered()));
+  protected readonly resultsTitle = computed(() =>
+    plural('transactions.results', this.filtered().length),
+  );
   protected readonly isFiltering = computed(() => hasActiveFilters(this.filters()));
 
   protected onPage(event: PageEvent): void {

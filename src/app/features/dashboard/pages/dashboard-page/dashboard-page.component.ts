@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import {
   budgetProgress,
   expensesByCategory,
@@ -15,6 +16,7 @@ import { SelectedMonthStore } from '../../../../core/state/selected-month.store'
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
 import { MonthNavigatorComponent } from '../../../../shared/components/month-navigator/month-navigator.component';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { TranslatedText, plural } from '../../../../shared/i18n/translated-text';
 import { addMonths } from '../../../../shared/utils/month';
 import { BudgetAlertsComponent } from '../../components/budget-alerts/budget-alerts.component';
 import { ExpensesChartComponent } from '../../components/expenses-chart/expenses-chart.component';
@@ -29,6 +31,7 @@ const HISTORY_MONTHS = 6;
   selector: 'app-dashboard-page',
   imports: [
     RouterLink,
+    TranslocoPipe,
     MatButtonModule,
     MatIconModule,
     PageHeaderComponent,
@@ -62,10 +65,9 @@ export class DashboardPageComponent {
   protected readonly expenseHint = computed(() =>
     describeChange(this.summary().expenseCents, this.previousSummary().expenseCents),
   );
-  protected readonly balanceHint = computed(() => {
-    const count = this.monthTransactions().length;
-    return count === 1 ? '1 transação no mês' : `${count} transações no mês`;
-  });
+  protected readonly balanceHint = computed(() =>
+    plural('dashboard.summary.transactionsInMonth', this.monthTransactions().length),
+  );
 
   protected readonly historyMonths = HISTORY_MONTHS;
   protected readonly monthlyTotals = computed(() =>
@@ -91,14 +93,14 @@ export class DashboardPageComponent {
   protected readonly alertsSummary = computed(() => {
     const over = this.alerts().filter((item) => item.status === 'over').length;
     const warning = this.alerts().length - over;
-    const parts: string[] = [];
+    const parts: TranslatedText[] = [];
     if (over) {
-      parts.push(over === 1 ? '1 acima do limite' : `${over} acima do limite`);
+      parts.push(plural('dashboard.alerts.over', over));
     }
     if (warning) {
-      parts.push(warning === 1 ? '1 perto do limite' : `${warning} perto do limite`);
+      parts.push(plural('dashboard.alerts.warning', warning));
     }
-    return parts.join(' · ');
+    return parts;
   });
 
   protected readonly recent = computed(() =>
@@ -108,14 +110,17 @@ export class DashboardPageComponent {
   );
 }
 
-function describeChange(current: number, previous: number): string {
+function describeChange(current: number, previous: number): TranslatedText {
   const change = percentChange(current, previous);
   if (change === null) {
-    return 'Sem dados no mês anterior';
+    return { key: 'dashboard.summary.noPrevious' };
   }
   const rounded = Math.round(change * 100);
   if (rounded === 0) {
-    return 'Igual ao mês anterior';
+    return { key: 'dashboard.summary.samePrevious' };
   }
-  return `${rounded > 0 ? '▲' : '▼'} ${Math.abs(rounded)}% vs. mês anterior`;
+  return {
+    key: rounded > 0 ? 'dashboard.summary.up' : 'dashboard.summary.down',
+    params: { percent: Math.abs(rounded) },
+  };
 }

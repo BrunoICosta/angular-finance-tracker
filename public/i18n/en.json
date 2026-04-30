@@ -1,0 +1,75 @@
+{
+  "titles": {
+    "app": "Finances",
+    "dashboard": "Overview",
+    "transactions": "Transactions",
+    "budgets": "Budgets",
+    "categories": "Categories",
+    "settings": "Settings"
+  },
+  "nav": {
+    "dashboard": "Overview",
+    "transactions": "Transactions",
+    "budgets": "Budgets",
+    "categories": "Categories",
+    "settings": "Settings"
+  },
+  "shell": {
+    "skipToContent": "Skip to content",
+    "mainMenu": "Main menu",
+    "openMenu": "Open menu",
+    "localOnly": "Data is saved in this browser only.",
+    "loading": "Loading your data…",
+    "loadError": {
+      "title": "Your data could not be loaded",
+      "message": "The data saved in this browser seems to be corrupted.",
+      "retry": "Try again",
+      "reset": "Reset data"
+    },
+    "saveError": "Your data could not be saved in this browser."
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "enableLight": "Switch to light theme",
+    "enableDark": "Switch to dark theme"
+  },
+  "language": {
+    "label": "Language: {{language}}. Change language",
+    "change": "Change language"
+  },
+  "common": {
+    "ok": "OK",
+    "close": "Close",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "undo": "Undo",
+    "noCategory": "No category",
+    "actionsFor": "Actions for {{name}}",
+    "amountPlaceholder": "0.00",
+    "datePlaceholder": "mm/dd/yyyy",
+    "type": {
+      "income": "Income",
+      "expense": "Expense",
+      "incomePlural": "Income",
+      "expensePlural": "Expenses"
+    }
+  },
+  "paginator": {
+    "itemsPerPage": "Items per page",
+    "next": "Next page",
+    "previous": "Previous page",
+    "first": "First page",
+    "last": "Last page",
+    "range": "{{start}}–{{end}} of {{length}}"
+  },
+  "monthNavigator": {
+    "label": "Select month",
+    "previous": "Previous month",
+    "next": "Next month",
+    "current": "This month"
+  }
+}

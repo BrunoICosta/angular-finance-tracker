@@ -10,18 +10,24 @@
     (matSortChange)="onSortChange($event)"
   >
     <caption class="visually-hidden">
-      Lista de transações
+      {{
+        'transactions.table.caption' | transloco
+      }}
     </caption>
 
     <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Data</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ 'transactions.table.date' | transloco }}
+      </th>
       <td mat-cell *matCellDef="let row" class="tabular">
-        {{ row.date | isoDate | date: 'dd/MM/yyyy' }}
+        {{ row.date | localDate: 'shortDate' }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Descrição</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ 'transactions.table.description' | transloco }}
+      </th>
       <td mat-cell *matCellDef="let row">
         @let category = categoryById().get(row.categoryId);
         <div class="description">
@@ -36,8 +42,8 @@
             <span class="description__title">{{ row.description }}</span>
             @if (compact()) {
               <span class="description__meta"
-                >{{ category?.name ?? 'Sem categoria' }} ·
-                {{ row.date | isoDate | date: 'dd/MM' }}</span
+                >{{ category?.name ?? ('common.noCategory' | transloco) }} ·
+                {{ row.date | localDate: 'd MMM' }}</span
               >
             } @else if (row.notes) {
               <span class="description__meta">{{ row.notes }}</span>
@@ -48,7 +54,9 @@
     </ng-container>
 
     <ng-container matColumnDef="category">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Categoria</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ 'transactions.table.category' | transloco }}
+      </th>
       <td mat-cell *matCellDef="let row">
         @let category = categoryById().get(row.categoryId);
         <span class="chip" [style.--category-color]="category?.color ?? '#7b8794'">
@@ -57,14 +65,14 @@
             [color]="category?.color ?? '#7b8794'"
             [size]="24"
           />
-          {{ category?.name ?? 'Sem categoria' }}
+          {{ category?.name ?? ('common.noCategory' | transloco) }}
         </span>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="amount">
       <th mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition="before" class="amount">
-        Valor
+        {{ 'transactions.table.amount' | transloco }}
       </th>
       <td
         mat-cell
@@ -73,32 +81,32 @@
         [class.text-income]="row.type === 'income'"
         [class.text-expense]="row.type === 'expense'"
       >
-        <span class="visually-hidden">{{ row.type === 'income' ? 'Receita' : 'Despesa' }}</span>
+        <span class="visually-hidden">{{ 'common.type.' + row.type | transloco }}</span>
         {{ row.type === 'income' ? '+' : '−' }} {{ row.amountCents | brl }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef class="actions">
-        <span class="visually-hidden">Ações</span>
+        <span class="visually-hidden">{{ 'transactions.table.actions' | transloco }}</span>
       </th>
       <td mat-cell *matCellDef="let row" class="actions">
         <button
           mat-icon-button
           type="button"
           [matMenuTriggerFor]="menu"
-          [attr.aria-label]="'Ações para ' + row.description"
+          [attr.aria-label]="'common.actionsFor' | transloco: { name: row.description }"
         >
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu" xPosition="before">
           <button mat-menu-item type="button" (click)="edit.emit(row)">
             <mat-icon>edit</mat-icon>
-            <span>Editar</span>
+            <span>{{ 'common.edit' | transloco }}</span>
           </button>
           <button mat-menu-item type="button" (click)="remove.emit(row)">
             <mat-icon>delete</mat-icon>
-            <span>Excluir</span>
+            <span>{{ 'common.delete' | transloco }}</span>
           </button>
         </mat-menu>
       </td>

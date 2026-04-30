@@ -1,0 +1,75 @@
+{
+  "titles": {
+    "app": "Finanças",
+    "dashboard": "Visão geral",
+    "transactions": "Transações",
+    "budgets": "Orçamentos",
+    "categories": "Categorias",
+    "settings": "Configurações"
+  },
+  "nav": {
+    "dashboard": "Visão geral",
+    "transactions": "Transações",
+    "budgets": "Orçamentos",
+    "categories": "Categorias",
+    "settings": "Configurações"
+  },
+  "shell": {
+    "skipToContent": "Pular para o conteúdo",
+    "mainMenu": "Menu principal",
+    "openMenu": "Abrir menu",
+    "localOnly": "Dados salvos apenas neste navegador.",
+    "loading": "Carregando seus dados…",
+    "loadError": {
+      "title": "Não foi possível carregar seus dados",
+      "message": "Os dados salvos neste navegador parecem estar corrompidos.",
+      "retry": "Tentar novamente",
+      "reset": "Redefinir dados"
+    },
+    "saveError": "Não foi possível salvar seus dados neste navegador."
+  },
+  "theme": {
+    "light": "Claro",
+    "dark": "Escuro",
+    "enableLight": "Ativar tema claro",
+    "enableDark": "Ativar tema escuro"
+  },
+  "language": {
+    "label": "Idioma: {{language}}. Alterar idioma",
+    "change": "Alterar idioma"
+  },
+  "common": {
+    "ok": "OK",
+    "close": "Fechar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Salvar",
+    "edit": "Editar",
+    "delete": "Excluir",
+    "undo": "Desfazer",
+    "noCategory": "Sem categoria",
+    "actionsFor": "Ações para {{name}}",
+    "amountPlaceholder": "0,00",
+    "datePlaceholder": "dd/mm/aaaa",
+    "type": {
+      "income": "Receita",
+      "expense": "Despesa",
+      "incomePlural": "Receitas",
+      "expensePlural": "Despesas"
+    }
+  },
+  "paginator": {
+    "itemsPerPage": "Itens por página",
+    "next": "Próxima página",
+    "previous": "Página anterior",
+    "first": "Primeira página",
+    "last": "Última página",
+    "range": "{{start}}–{{end}} de {{length}}"
+  },
+  "monthNavigator": {
+    "label": "Selecionar mês",
+    "previous": "Mês anterior",
+    "next": "Próximo mês",
+    "current": "Mês atual"
+  }
+}
