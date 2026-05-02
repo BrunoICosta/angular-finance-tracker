@@ -8,8 +8,9 @@ import {
   TransactionDraft,
   emptyFinanceData,
 } from '../models';
-import { DEFAULT_CATEGORIES } from '../data/default-categories';
+import { defaultCategories } from '../data/default-categories';
 import { createDemoData } from '../data/demo-data';
+import { CONTENT_LANG } from '../i18n/content-lang';
 import { FinanceRepository } from '../storage/finance.repository';
 import { createId } from '../../shared/utils/id';
 
@@ -17,7 +18,7 @@ export type LoadStatus = 'loading' | 'ready' | 'error';
 
 export class CategoryInUseError extends Error {
   constructor(readonly usage: number) {
-    super(`A categoria está em uso por ${usage} transação(ões).`);
+    super(`Category is used by ${usage} transaction(s).`);
     this.name = 'CategoryInUseError';
   }
 }
@@ -29,6 +30,8 @@ export class CategoryInUseError extends Error {
 @Injectable({ providedIn: 'root' })
 export class FinanceStore {
   private readonly repository = inject(FinanceRepository);
+  /** Language for generated content (demo data, default categories). */
+  private readonly contentLang = inject(CONTENT_LANG);
 
   private readonly data = signal<FinanceData>(emptyFinanceData());
   private readonly _status = signal<LoadStatus>('loading');
@@ -80,7 +83,7 @@ export class FinanceStore {
     try {
       const saved = await this.repository.load();
       // First run: nothing saved yet, so seed demo data to make the app explorable.
-      this.data.set(saved ?? createDemoData());
+      this.data.set(saved ?? createDemoData(new Date(), undefined, this.contentLang()));
       this._status.set('ready');
     } catch (error) {
       this._loadError.set(error instanceof Error ? error.message : String(error));
@@ -96,12 +99,12 @@ export class FinanceStore {
 
   /** Removes every transaction and budget, keeping only the default categories. */
   clearAll(): void {
-    this.data.set(emptyFinanceData([...DEFAULT_CATEGORIES]));
+    this.data.set(emptyFinanceData(defaultCategories(this.contentLang())));
   }
 
   /** Replaces everything with a fresh set of demo data. */
   restoreDemo(): void {
-    this.data.set(createDemoData());
+    this.data.set(createDemoData(new Date(), undefined, this.contentLang()));
   }
 
   // Transactions
@@ -202,9 +205,7 @@ export class FinanceStore {
       await this.repository.save(snapshot);
       this._saveError.set(null);
     } catch (error) {
-      this._saveError.set(
-        error instanceof Error ? error.message : 'Não foi possível salvar os dados.',
-      );
+      this._saveError.set(error instanceof Error ? error.message : 'Could not save the data.');
     }
   }
 }

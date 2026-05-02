@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { TranslocoPipe, provideTranslocoScope } from '@jsverse/transloco';
 import { Category } from '../../../../core/models';
 import { CategoryIconComponent } from '../../../../shared/components/category-icon/category-icon.component';
 import { BrlPipe } from '../../../../shared/pipes/brl.pipe';
@@ -31,17 +32,19 @@ export interface BudgetDialogResult {
     MatButtonModule,
     CategoryIconComponent,
     BrlPipe,
+    TranslocoPipe,
   ],
+  providers: [provideTranslocoScope('budgets')],
   template: `
     <h2 mat-dialog-title class="title">
       <app-category-icon [icon]="data.category.icon" [color]="data.category.color" />
-      Orçamento · {{ data.category.name }}
+      {{ 'budgets.dialog.title' | transloco: { name: data.category.name } }}
     </h2>
     <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
       <mat-dialog-content>
-        <p class="intro">Defina quanto pretende gastar por mês nesta categoria.</p>
+        <p class="intro">{{ 'budgets.dialog.intro' | transloco }}</p>
         <mat-form-field appearance="outline" floatLabel="always" class="field">
-          <mat-label>Limite mensal</mat-label>
+          <mat-label>{{ 'budgets.dialog.limit' | transloco }}</mat-label>
           <span matTextPrefix>R$&nbsp;</span>
           <input
             matInput
@@ -49,27 +52,31 @@ export interface BudgetDialogResult {
             inputmode="decimal"
             step="0.01"
             min="0.01"
-            placeholder="0,00"
+            [placeholder]="'common.amountPlaceholder' | transloco"
             formControlName="limit"
             cdkFocusInitial
           />
           @if (data.averageCents) {
-            <mat-hint>Média dos últimos meses: {{ data.averageCents | brl }}</mat-hint>
+            <mat-hint>{{
+              'budgets.dialog.average' | transloco: { amount: (data.averageCents | brl) }
+            }}</mat-hint>
           }
           @if (form.controls.limit.hasError('required')) {
-            <mat-error>Informe o limite.</mat-error>
+            <mat-error>{{ 'budgets.dialog.errors.required' | transloco }}</mat-error>
           } @else if (form.controls.limit.hasError('min')) {
-            <mat-error>O limite deve ser maior que zero.</mat-error>
+            <mat-error>{{ 'budgets.dialog.errors.min' | transloco }}</mat-error>
           }
         </mat-form-field>
       </mat-dialog-content>
       <mat-dialog-actions>
         @if (data.limitCents) {
-          <button mat-button type="button" class="remove" (click)="removeBudget()">Remover</button>
+          <button mat-button type="button" class="remove" (click)="removeBudget()">
+            {{ 'budgets.dialog.remove' | transloco }}
+          </button>
         }
         <span class="spacer"></span>
-        <button mat-button type="button" mat-dialog-close>Cancelar</button>
-        <button mat-flat-button type="submit">Salvar</button>
+        <button mat-button type="button" mat-dialog-close>{{ 'common.cancel' | transloco }}</button>
+        <button mat-flat-button type="submit">{{ 'common.save' | transloco }}</button>
       </mat-dialog-actions>
     </form>
   `,

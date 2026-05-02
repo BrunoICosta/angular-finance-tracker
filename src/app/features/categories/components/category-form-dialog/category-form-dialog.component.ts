@@ -14,6 +14,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { TranslocoPipe, provideTranslocoScope } from '@jsverse/transloco';
 import { Category, CategoryDraft, TransactionType } from '../../../../core/models';
 import { FinanceStore } from '../../../../core/state/finance.store';
 import { CategoryIconComponent } from '../../../../shared/components/category-icon/category-icon.component';
@@ -56,7 +57,9 @@ function uniqueNameValidator(
     MatButtonToggleModule,
     MatIconModule,
     CategoryIconComponent,
+    TranslocoPipe,
   ],
+  providers: [provideTranslocoScope('categories')],
   templateUrl: './category-form-dialog.component.html',
   styleUrl: './category-form-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

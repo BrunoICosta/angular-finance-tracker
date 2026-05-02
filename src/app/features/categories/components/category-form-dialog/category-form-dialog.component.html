@@ -1,4 +1,6 @@
-<h2 mat-dialog-title>{{ isEdit ? 'Editar categoria' : 'Nova categoria' }}</h2>
+<h2 mat-dialog-title>
+  {{ (isEdit ? 'categories.form.editTitle' : 'categories.form.newTitle') | transloco }}
+</h2>
 
 <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
   <mat-dialog-content class="form">
@@ -8,24 +10,26 @@
         [color]="preview().color ?? '#7b8794'"
         [size]="48"
       />
-      <span class="preview__name">{{ preview().name || 'Nome da categoria' }}</span>
+      <span class="preview__name">{{
+        preview().name || ('categories.form.namePlaceholder' | transloco)
+      }}</span>
     </div>
 
     <mat-button-toggle-group
       class="type-toggle"
       formControlName="type"
-      aria-label="Tipo da categoria"
+      [attr.aria-label]="'categories.form.type' | transloco"
       hideSingleSelectionIndicator
     >
-      <mat-button-toggle value="expense">Despesa</mat-button-toggle>
-      <mat-button-toggle value="income">Receita</mat-button-toggle>
+      <mat-button-toggle value="expense">{{ 'common.type.expense' | transloco }}</mat-button-toggle>
+      <mat-button-toggle value="income">{{ 'common.type.income' | transloco }}</mat-button-toggle>
     </mat-button-toggle-group>
     @if (typeLocked) {
-      <p class="note">O tipo não pode ser alterado porque a categoria já possui transações.</p>
+      <p class="note">{{ 'categories.form.typeLocked' | transloco }}</p>
     }
 
     <mat-form-field appearance="outline">
-      <mat-label>Nome</mat-label>
+      <mat-label>{{ 'categories.form.name' | transloco }}</mat-label>
       <input
         matInput
         formControlName="name"
@@ -34,44 +38,48 @@
         [maxlength]="nameMax"
       />
       @if (form.controls.name.hasError('required')) {
-        <mat-error>Informe um nome.</mat-error>
+        <mat-error>{{ 'categories.form.errors.name' | transloco }}</mat-error>
       }
     </mat-form-field>
     @if (form.hasError('duplicateName')) {
-      <p class="error" role="alert">Já existe uma categoria com esse nome.</p>
+      <p class="error" role="alert">{{ 'categories.form.errors.duplicate' | transloco }}</p>
     }
 
     <fieldset class="picker">
-      <legend>Cor</legend>
+      <legend>{{ 'categories.form.color' | transloco }}</legend>
       <div class="swatches">
         @for (color of colors; track color.value) {
-          <label class="swatch" [style.--swatch]="color.value" [title]="color.label">
+          <label class="swatch" [style.--swatch]="color.value" [title]="color.label | transloco">
             <input
               type="radio"
               formControlName="color"
               [value]="color.value"
-              [attr.aria-label]="color.label"
+              [attr.aria-label]="color.label | transloco"
             />
             <span class="swatch__dot"></span>
           </label>
         }
         <label class="swatch swatch--custom">
-          <input type="color" formControlName="color" aria-label="Cor personalizada" />
+          <input
+            type="color"
+            formControlName="color"
+            [attr.aria-label]="'categories.form.customColor' | transloco"
+          />
           <mat-icon aria-hidden="true">colorize</mat-icon>
         </label>
       </div>
     </fieldset>
 
     <fieldset class="picker">
-      <legend>Ícone</legend>
+      <legend>{{ 'categories.form.icon' | transloco }}</legend>
       <div class="icons">
         @for (icon of icons; track icon.name) {
-          <label class="icon-option" [title]="icon.label">
+          <label class="icon-option" [title]="icon.label | transloco">
             <input
               type="radio"
               formControlName="icon"
               [value]="icon.name"
-              [attr.aria-label]="icon.label"
+              [attr.aria-label]="icon.label | transloco"
             />
             <mat-icon aria-hidden="true">{{ icon.name }}</mat-icon>
           </label>
@@ -81,7 +89,9 @@
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button mat-button type="button" mat-dialog-close>Cancelar</button>
-    <button mat-flat-button type="submit">{{ isEdit ? 'Salvar' : 'Criar categoria' }}</button>
+    <button mat-button type="button" mat-dialog-close>{{ 'common.cancel' | transloco }}</button>
+    <button mat-flat-button type="submit">
+      {{ (isEdit ? 'common.save' : 'categories.create') | transloco }}
+    </button>
   </mat-dialog-actions>
 </form>

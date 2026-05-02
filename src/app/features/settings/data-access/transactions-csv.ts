@@ -1,11 +1,12 @@
+import { AppLang } from '../../../core/i18n/language';
 import { Category, Transaction, TransactionDraft, TransactionType } from '../../../core/models';
 import { createId } from '../../../shared/utils/id';
 import { parseAmount, toCents } from '../../../shared/utils/money';
 import { isValidIsoDate } from '../../../shared/utils/month';
 import { normalizeName } from '../../../shared/utils/text';
-import { parseCsv, serializeCsv } from './csv';
+import { CsvDelimiter, parseCsv, serializeCsv } from './csv';
 
-/** Column order of the exported file. Headers are in Portuguese, like the UI. */
+/** Internal column ids, in the order of the exported file. */
 export const CSV_HEADERS = [
   'data',
   'descricao',
@@ -26,7 +27,51 @@ const HEADER_ALIASES: Record<CsvColumn, readonly string[]> = {
   observacoes: ['observacoes', 'observacao', 'notes', 'notas', 'obs'],
 };
 
-const TYPE_LABELS: Record<TransactionType, string> = { income: 'receita', expense: 'despesa' };
+interface CsvFormat {
+  readonly headers: Readonly<Record<CsvColumn, string>>;
+  readonly types: Readonly<Record<TransactionType, string>>;
+  readonly delimiter: CsvDelimiter;
+  readonly decimal: ',' | '.';
+}
+
+/**
+ * The export follows the UI language: Portuguese uses `;` and a decimal comma (what Excel pt-BR
+ * expects), English uses `,` and a decimal point. The importer accepts both.
+ */
+export const CSV_FORMATS: Readonly<Record<AppLang, CsvFormat>> = {
+  'pt-BR': {
+    headers: {
+      data: 'data',
+      descricao: 'descricao',
+      valor: 'valor',
+      tipo: 'tipo',
+      categoria: 'categoria',
+      observacoes: 'observacoes',
+    },
+    types: { income: 'receita', expense: 'despesa' },
+    delimiter: ';',
+    decimal: ',',
+  },
+  en: {
+    headers: {
+      data: 'date',
+      descricao: 'description',
+      valor: 'amount',
+      tipo: 'type',
+      categoria: 'category',
+      observacoes: 'notes',
+    },
+    types: { income: 'income', expense: 'expense' },
+    delimiter: ',',
+    decimal: '.',
+  },
+};
+
+/** Header line shown in the UI as a hint, e.g. `data;descricao;valor;...`. */
+export function csvHeaderLine(lang: AppLang): string {
+  const format = CSV_FORMATS[lang];
+  return CSV_HEADERS.map((column) => format.headers[column]).join(format.delimiter);
+}
 const TYPE_ALIASES: Record<string, TransactionType> = {
   receita: 'income',
   entrada: 'income',
@@ -41,7 +86,14 @@ const NEW_CATEGORY_COLORS = ['#5f7d8c', '#2f80ed', '#14a89c', '#e8772e', '#9b51e
 export interface CsvImportError {
   /** 1-based line number in the file (the header is line 1). */
   readonly line: number;
-  readonly message: string;
+  /** Translation key (settings scope) and its params. */
+  readonly key: string;
+  readonly params?: Record<string, string>;
+}
+
+export interface CsvImportOptions {
+  /** Names used for rows without a category, in the current language. */
+  readonly fallbackCategoryNames?: Readonly<Record<TransactionType, string>>;
 }
 
 export interface CsvImportResult {
@@ -51,29 +103,36 @@ export interface CsvImportResult {
   readonly errors: CsvImportError[];
 }
 
+/** The file cannot be used at all. `key` is a translation key of the settings scope. */
 export class CsvFormatError extends Error {
-  constructor(message: string) {
-    super(message);
+  constructor(
+    readonly key: string,
+    readonly params: Record<string, string> = {},
+  ) {
+    super(key);
     this.name = 'CsvFormatError';
   }
 }
 
-/** Serializes transactions as `;`-separated CSV with decimal commas, as Excel pt-BR expects. */
+/** Serializes transactions as CSV in the format of the given language. */
 export function transactionsToCsv(
   transactions: readonly Transaction[],
   categoryById: ReadonlyMap<string, Category>,
+  lang: AppLang = 'pt-BR',
 ): string {
+  const format = CSV_FORMATS[lang];
   const rows = [...transactions]
     .sort((a, b) => a.date.localeCompare(b.date) || a.createdAt.localeCompare(b.createdAt))
     .map((transaction) => [
       transaction.date,
       transaction.description,
-      (transaction.amountCents / 100).toFixed(2).replace('.', ','),
-      TYPE_LABELS[transaction.type],
+      (transaction.amountCents / 100).toFixed(2).replace('.', format.decimal),
+      format.types[transaction.type],
       categoryById.get(transaction.categoryId)?.name ?? '',
       transaction.notes ?? '',
     ]);
-  return serializeCsv([[...CSV_HEADERS], ...rows], ';');
+  const header = CSV_HEADERS.map((column) => format.headers[column]);
+  return serializeCsv([header, ...rows], format.delimiter);
 }
 
 /**
@@ -83,15 +142,22 @@ export function transactionsToCsv(
 export function csvToTransactions(
   text: string,
   existingCategories: readonly Category[],
+  options: CsvImportOptions = {},
 ): CsvImportResult {
+  const fallbackNames = options.fallbackCategoryNames ?? {
+    income: 'Outras receitas',
+    expense: 'Outras despesas',
+  };
   const rows = parseCsv(text);
   if (rows.length === 0) {
-    throw new CsvFormatError('O arquivo está vazio.');
+    throw new CsvFormatError('settings.import.errors.empty');
   }
   const columns = mapHeader(rows[0]);
   const missing = (['data', 'descricao', 'valor'] as const).filter((column) => columns[column] < 0);
   if (missing.length) {
-    throw new CsvFormatError(`Colunas obrigatórias ausentes: ${missing.join(', ')}.`);
+    throw new CsvFormatError('settings.import.errors.missingColumns', {
+      columns: missing.join(', '),
+    });
   }
 
   const categoriesByKey = new Map(
@@ -108,17 +174,17 @@ export function csvToTransactions(
 
     const date = parseDate(cell('data'));
     if (!date) {
-      errors.push({ line, message: `Data inválida: "${cell('data')}".` });
+      errors.push({ line, key: 'settings.import.errors.date', params: { value: cell('data') } });
       return;
     }
     const description = cell('descricao');
     if (!description) {
-      errors.push({ line, message: 'Descrição vazia.' });
+      errors.push({ line, key: 'settings.import.errors.description' });
       return;
     }
     const amount = parseAmount(cell('valor'));
     if (amount === null || amount === 0) {
-      errors.push({ line, message: `Valor inválido: "${cell('valor')}".` });
+      errors.push({ line, key: 'settings.import.errors.amount', params: { value: cell('valor') } });
       return;
     }
     const rawType = normalizeName(cell('tipo'));
@@ -126,7 +192,7 @@ export function csvToTransactions(
     if (rawType) {
       const mapped = TYPE_ALIASES[rawType];
       if (!mapped) {
-        errors.push({ line, message: `Tipo desconhecido: "${cell('tipo')}".` });
+        errors.push({ line, key: 'settings.import.errors.type', params: { value: cell('tipo') } });
         return;
       }
       type = mapped;
@@ -135,8 +201,7 @@ export function csvToTransactions(
       type = amount < 0 ? 'expense' : 'income';
     }
 
-    const categoryName =
-      cell('categoria') || (type === 'income' ? 'Outras receitas' : 'Outras despesas');
+    const categoryName = cell('categoria') || fallbackNames[type];
     const key = categoryKey(categoryName, type);
     let category = categoriesByKey.get(key);
     if (!category) {

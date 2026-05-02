@@ -13,7 +13,7 @@ export abstract class FinanceRepository {
 }
 
 export class FinanceDataCorruptedError extends Error {
-  constructor(message = 'Os dados salvos estão corrompidos.') {
+  constructor(message = 'The saved data is corrupted.') {
     super(message);
     this.name = 'FinanceDataCorruptedError';
   }

@@ -1,14 +1,19 @@
-<app-page-header title="Categorias" subtitle="Organize suas transações com cores e ícones">
+<app-page-header
+  [title]="'categories.title' | transloco"
+  [subtitle]="'categories.subtitle' | transloco"
+>
   <button mat-flat-button type="button" actions (click)="create('expense')">
     <mat-icon>add</mat-icon>
-    Nova categoria
+    {{ 'categories.new' | transloco }}
   </button>
 </app-page-header>
 
 @for (group of groups(); track group.type) {
   <section class="group" [attr.aria-labelledby]="'group-' + group.type">
     <header class="group__header">
-      <h2 class="group__title" [id]="'group-' + group.type">{{ group.title }}</h2>
+      <h2 class="group__title" [id]="'group-' + group.type">
+        {{ group.title | transloco }}
+      </h2>
       <span class="group__count">{{ group.items.length }}</span>
     </header>
 
@@ -20,24 +25,26 @@
             <app-category-icon [icon]="category.icon" [color]="category.color" [size]="44" />
             <div class="card__text">
               <span class="card__name">{{ category.name }}</span>
-              <span class="card__meta">{{ item.usageLabel }}</span>
+              <span class="card__meta">{{
+                item.usageLabel.key | transloco: item.usageLabel.params
+              }}</span>
             </div>
             <button
               mat-icon-button
               type="button"
               [matMenuTriggerFor]="menu"
-              [attr.aria-label]="'Ações para ' + category.name"
+              [attr.aria-label]="'common.actionsFor' | transloco: { name: category.name }"
             >
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu" xPosition="before">
               <button mat-menu-item type="button" (click)="edit(category)">
                 <mat-icon>edit</mat-icon>
-                <span>Editar</span>
+                <span>{{ 'common.edit' | transloco }}</span>
               </button>
               <button mat-menu-item type="button" (click)="remove(category)">
                 <mat-icon>delete</mat-icon>
-                <span>Excluir</span>
+                <span>{{ 'common.delete' | transloco }}</span>
               </button>
             </mat-menu>
           </li>
@@ -45,18 +52,18 @@
         <li>
           <button type="button" class="card card--add" (click)="create(group.type)">
             <mat-icon aria-hidden="true">add</mat-icon>
-            Adicionar em {{ group.title.toLowerCase() }}
+            {{ 'categories.addTo.' + group.type | transloco }}
           </button>
         </li>
       </ul>
     } @else {
       <app-empty-state
         icon="category"
-        title="Nenhuma categoria"
-        [message]="'Crie categorias de ' + group.title.toLowerCase() + ' para classificar.'"
+        [title]="'categories.empty.title' | transloco"
+        [message]="'categories.empty.message.' + group.type | transloco"
       >
         <button mat-stroked-button type="button" (click)="create(group.type)">
-          Criar categoria
+          {{ 'categories.create' | transloco }}
         </button>
       </app-empty-state>
     }

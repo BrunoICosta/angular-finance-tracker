@@ -1,4 +1,6 @@
+import { AppLang } from '../i18n/language';
 import { Category } from '../models';
+import { demoLabel } from './demo-labels';
 
 /** Starter categories. Stable ids keep demo data and CSV round-trips predictable. */
 export const DEFAULT_CATEGORIES: readonly Category[] = [
@@ -46,3 +48,11 @@ export const DEFAULT_CATEGORIES: readonly Category[] = [
     icon: 'more_horiz',
   },
 ];
+
+/** Default categories with names in the given language. */
+export function defaultCategories(lang: AppLang = 'pt-BR'): Category[] {
+  return DEFAULT_CATEGORIES.map((category) => ({
+    ...category,
+    name: demoLabel(category.name, lang),
+  }));
+}

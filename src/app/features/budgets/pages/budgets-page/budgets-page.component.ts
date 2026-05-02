@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { firstValueFrom } from 'rxjs';
 import {
   averageMonthlyExpenses,
@@ -17,6 +18,7 @@ import { CategoryIconComponent } from '../../../../shared/components/category-ic
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
 import { MonthNavigatorComponent } from '../../../../shared/components/month-navigator/month-navigator.component';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { plural } from '../../../../shared/i18n/translated-text';
 import { BrlPipe } from '../../../../shared/pipes/brl.pipe';
 import {
   BudgetDialogComponent,
@@ -39,6 +41,7 @@ const AVERAGE_WINDOW_MONTHS = 3;
     CategoryIconComponent,
     BudgetRowComponent,
     BrlPipe,
+    TranslocoPipe,
   ],
   templateUrl: './budgets-page.component.html',
   styleUrl: './budgets-page.component.scss',
@@ -75,6 +78,10 @@ export class BudgetsPageComponent {
     };
   });
 
+  protected readonly overMessage = computed(() =>
+    plural('budgets.overview.overCount', this.totals().overCount),
+  );
+
   protected readonly totalBarValue = computed(() => Math.min(100, this.totals().ratio * 100));
 
   private readonly averages = computed(() =>
@@ -100,9 +107,8 @@ export class BudgetsPageComponent {
     }
     this.store.setBudget(category.id, result.limitCents);
     this.notifications.success(
-      result.limitCents > 0
-        ? `Orçamento de ${category.name} salvo.`
-        : `Orçamento de ${category.name} removido.`,
+      result.limitCents > 0 ? 'budgets.toast.saved' : 'budgets.toast.removed',
+      { name: category.name },
     );
   }
 }

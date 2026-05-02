@@ -1,7 +1,9 @@
+import { AppLang } from '../i18n/language';
 import { Budget, FINANCE_DATA_VERSION, FinanceData, Transaction, TransactionType } from '../models';
 import { toCents } from '../../shared/utils/money';
 import { MonthKey, lastMonths, toMonthKey } from '../../shared/utils/month';
-import { DEFAULT_CATEGORIES } from './default-categories';
+import { defaultCategories } from './default-categories';
+import { demoLabel } from './demo-labels';
 
 /** Number of months covered by the demo data, ending at the current month. */
 export const DEMO_MONTHS = 6;
@@ -31,7 +33,11 @@ function createRandom(seed: number): () => number {
  * Builds realistic sample data for the last {@link DEMO_MONTHS} months ending at `today`'s month,
  * including budgets and at least one over-budget category in the current month.
  */
-export function createDemoData(today: Date = new Date(), seed = 2026): FinanceData {
+export function createDemoData(
+  today: Date = new Date(),
+  seed = 2026,
+  lang: AppLang = 'pt-BR',
+): FinanceData {
   const random = createRandom(seed);
   const between = (min: number, max: number): number =>
     Math.round((min + random() * (max - min)) * 100) / 100;
@@ -54,12 +60,12 @@ export function createDemoData(today: Date = new Date(), seed = 2026): FinanceDa
     const date = `${month}-${String(dayOfMonth).padStart(2, '0')}`;
     transactions.push({
       id: `demo-${String(sequence).padStart(4, '0')}`,
-      description,
+      description: demoLabel(description, lang),
       amountCents: toCents(amount),
       date,
       type,
       categoryId,
-      ...(notes ? { notes } : {}),
+      ...(notes ? { notes: demoLabel(notes, lang) } : {}),
       createdAt: `${date}T12:00:00.000Z`,
     });
   };
@@ -128,7 +134,7 @@ export function createDemoData(today: Date = new Date(), seed = 2026): FinanceDa
   return {
     version: FINANCE_DATA_VERSION,
     transactions,
-    categories: [...DEFAULT_CATEGORIES],
+    categories: defaultCategories(lang),
     budgets: [...DEMO_BUDGETS],
   };
 }

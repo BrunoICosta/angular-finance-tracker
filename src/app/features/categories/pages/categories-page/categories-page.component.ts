@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { firstValueFrom } from 'rxjs';
 import { Category, CategoryDraft, TransactionType } from '../../../../core/models';
 import { NotificationService } from '../../../../core/services/notification.service';
@@ -11,6 +12,7 @@ import { CategoryIconComponent } from '../../../../shared/components/category-ic
 import { ConfirmDialogService } from '../../../../shared/components/confirm-dialog/confirm-dialog.service';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { TranslatedText, plural } from '../../../../shared/i18n/translated-text';
 import {
   CategoryFormDialogComponent,
   CategoryFormDialogData,
@@ -18,7 +20,7 @@ import {
 
 interface CategoryItem {
   readonly category: Category;
-  readonly usageLabel: string;
+  readonly usageLabel: TranslatedText;
 }
 
 interface CategoryGroup {
@@ -27,11 +29,8 @@ interface CategoryGroup {
   readonly items: readonly CategoryItem[];
 }
 
-function usageLabel(usage: number): string {
-  if (usage === 0) {
-    return 'Nenhuma transação';
-  }
-  return usage === 1 ? '1 transação' : `${usage} transações`;
+function usageLabel(usage: number): TranslatedText {
+  return usage === 0 ? { key: 'categories.usage.none' } : plural('categories.usage', usage);
 }
 
 @Component({
@@ -43,6 +42,7 @@ function usageLabel(usage: number): string {
     PageHeaderComponent,
     CategoryIconComponent,
     EmptyStateComponent,
+    TranslocoPipe,
   ],
   templateUrl: './categories-page.component.html',
   styleUrl: './categories-page.component.scss',
@@ -62,8 +62,16 @@ export class CategoriesPageComponent {
         usageLabel: usageLabel(usage.get(category.id) ?? 0),
       }));
     return [
-      { type: 'expense', title: 'Despesas', items: toItems(this.store.expenseCategories()) },
-      { type: 'income', title: 'Receitas', items: toItems(this.store.incomeCategories()) },
+      {
+        type: 'expense',
+        title: 'common.type.expensePlural',
+        items: toItems(this.store.expenseCategories()),
+      },
+      {
+        type: 'income',
+        title: 'common.type.incomePlural',
+        items: toItems(this.store.incomeCategories()),
+      },
     ];
   });
 
@@ -71,7 +79,7 @@ export class CategoriesPageComponent {
     const draft = await this.open({ type });
     if (draft) {
       this.store.addCategory(draft);
-      this.notifications.success(`Categoria "${draft.name}" criada.`);
+      this.notifications.success('categories.toast.created', { name: draft.name });
     }
   }
 
@@ -80,22 +88,21 @@ export class CategoriesPageComponent {
     const draft = await this.open({ category, usage });
     if (draft) {
       this.store.updateCategory(category.id, draft);
-      this.notifications.success('Categoria atualizada.');
+      this.notifications.success('categories.toast.updated');
     }
   }
 
   protected async remove(category: Category): Promise<void> {
     const usage = this.store.categoryUsage().get(category.id) ?? 0;
     if (usage > 0) {
-      this.notifications.error(
-        `"${category.name}" possui ${usage} transação(ões). Mova ou exclua-as antes de remover a categoria.`,
-      );
+      this.notifications.error('categories.toast.inUse', { name: category.name, count: usage });
       return;
     }
     const confirmed = await this.confirmDialog.confirm({
-      title: 'Excluir categoria?',
-      message: `"${category.name}" e o orçamento associado serão removidos.`,
-      confirmLabel: 'Excluir',
+      title: 'categories.delete.title',
+      message: 'categories.delete.message',
+      params: { name: category.name },
+      confirmLabel: 'common.delete',
       destructive: true,
     });
     if (!confirmed) {
@@ -103,10 +110,13 @@ export class CategoriesPageComponent {
     }
     try {
       this.store.removeCategory(category.id);
-      this.notifications.success('Categoria excluída.');
+      this.notifications.success('categories.toast.deleted');
     } catch (error) {
       if (error instanceof CategoryInUseError) {
-        this.notifications.error(error.message);
+        this.notifications.error('categories.toast.inUse', {
+          name: category.name,
+          count: error.usage,
+        });
       } else {
         throw error;
       }

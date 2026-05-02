@@ -1,35 +1,57 @@
-<app-page-header title="Configurações" subtitle="Aparência, importação e exportação de dados" />
+<app-page-header
+  [title]="'settings.title' | transloco"
+  [subtitle]="'settings.subtitle' | transloco"
+/>
 
 <div class="sections">
   <section class="card" aria-labelledby="appearance-title">
     <div class="card__heading">
       <mat-icon class="card__icon" aria-hidden="true">palette</mat-icon>
       <div>
-        <h2 id="appearance-title" class="card__title">Aparência</h2>
-        <p class="card__text">Escolha o tema da interface. A preferência fica salva.</p>
+        <h2 id="appearance-title" class="card__title">
+          {{ 'settings.appearance.title' | transloco }}
+        </h2>
+        <p class="card__text">{{ 'settings.appearance.text' | transloco }}</p>
       </div>
     </div>
-    <mat-button-toggle-group
-      class="theme-toggle"
-      aria-label="Tema"
-      hideSingleSelectionIndicator
-      [value]="theme.theme()"
-      (change)="setTheme($event.value)"
-    >
-      <mat-button-toggle value="light"><mat-icon>light_mode</mat-icon> Claro</mat-button-toggle>
-      <mat-button-toggle value="dark"><mat-icon>dark_mode</mat-icon> Escuro</mat-button-toggle>
-    </mat-button-toggle-group>
+    <div class="card__actions">
+      <mat-button-toggle-group
+        class="theme-toggle"
+        hideSingleSelectionIndicator
+        [attr.aria-label]="'settings.appearance.theme' | transloco"
+        [value]="theme.theme()"
+        (change)="setTheme($event.value)"
+      >
+        <mat-button-toggle value="light">
+          <mat-icon>light_mode</mat-icon> {{ 'theme.light' | transloco }}
+        </mat-button-toggle>
+        <mat-button-toggle value="dark">
+          <mat-icon>dark_mode</mat-icon> {{ 'theme.dark' | transloco }}
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+
+      <mat-button-toggle-group
+        class="language-toggle"
+        hideSingleSelectionIndicator
+        [attr.aria-label]="'settings.appearance.language' | transloco"
+        [value]="languages.lang()"
+        (change)="setLanguage($event.value)"
+      >
+        @for (language of languages.languages; track language.code) {
+          <mat-button-toggle [value]="language.code" [attr.lang]="language.code">
+            {{ language.label }}
+          </mat-button-toggle>
+        }
+      </mat-button-toggle-group>
+    </div>
   </section>
 
   <section class="card" aria-labelledby="export-title">
     <div class="card__heading">
       <mat-icon class="card__icon" aria-hidden="true">download</mat-icon>
       <div>
-        <h2 id="export-title" class="card__title">Exportar CSV</h2>
-        <p class="card__text">
-          Baixe todas as {{ store.transactions().length }} transações em um arquivo compatível com
-          Excel e Google Planilhas.
-        </p>
+        <h2 id="export-title" class="card__title">{{ 'settings.export.title' | transloco }}</h2>
+        <p class="card__text">{{ exportText().key | transloco: exportText().params }}</p>
       </div>
     </div>
     <button
@@ -39,7 +61,7 @@
       (click)="exportCsv()"
     >
       <mat-icon>download</mat-icon>
-      Exportar transações
+      {{ 'settings.export.action' | transloco }}
     </button>
   </section>
 
@@ -47,11 +69,11 @@
     <div class="card__heading">
       <mat-icon class="card__icon" aria-hidden="true">upload</mat-icon>
       <div>
-        <h2 id="import-title" class="card__title">Importar CSV</h2>
+        <h2 id="import-title" class="card__title">{{ 'settings.import.title' | transloco }}</h2>
         <p class="card__text">
-          Colunas aceitas: <code>{{ csvHeaders }}</code
-          >. Separador <code>;</code> ou <code>,</code>, datas em <code>aaaa-mm-dd</code> ou
-          <code>dd/mm/aaaa</code>. Categorias que não existirem serão criadas.
+          {{ 'settings.import.columns' | transloco }} <code>{{ csvHeaders() }}</code
+          >.
+          {{ 'settings.import.help' | transloco }}
         </p>
       </div>
     </div>
@@ -71,37 +93,38 @@
       } @else {
         <mat-icon>upload_file</mat-icon>
       }
-      Escolher arquivo
+      {{ 'settings.import.choose' | transloco }}
     </button>
 
-    @if (importError(); as message) {
+    @if (importError(); as error) {
       <p class="feedback feedback--error" role="alert">
         <mat-icon aria-hidden="true">error</mat-icon>
-        {{ message }}
+        {{ error.key | transloco: error.params }}
       </p>
     }
-    @if (importSummary(); as summary) {
+    @if (summaryLines(); as lines) {
+      @let summary = lines.summary;
       <div class="feedback" role="status">
         <p class="feedback__title">
           <mat-icon aria-hidden="true">{{ summary.imported ? 'check_circle' : 'info' }}</mat-icon>
-          {{ summary.fileName }}: {{ summary.imported }}
-          {{ summary.imported === 1 ? 'transação importada' : 'transações importadas' }}
-          @if (summary.newCategories) {
-            · {{ summary.newCategories }}
-            {{ summary.newCategories === 1 ? 'categoria criada' : 'categorias criadas' }}
+          {{ lines.imported.key | transloco: lines.imported.params }}
+          @if (lines.categories; as categories) {
+            · {{ categories.key | transloco: categories.params }}
           }
         </p>
-        @if (summary.errors.length) {
-          <p class="feedback__subtitle">
-            {{ summary.errors.length }}
-            {{ summary.errors.length === 1 ? 'linha ignorada' : 'linhas ignoradas' }}:
-          </p>
+        @if (lines.skipped; as skipped) {
+          <p class="feedback__subtitle">{{ skipped.key | transloco: skipped.params }}</p>
           <ul class="feedback__errors">
             @for (error of summary.errors.slice(0, 5); track error.line) {
-              <li>Linha {{ error.line }}: {{ error.message }}</li>
+              <li>
+                {{ 'settings.import.line' | transloco: { line: error.line } }}
+                {{ error.key | transloco: error.params }}
+              </li>
             }
             @if (summary.errors.length > 5) {
-              <li>e mais {{ summary.errors.length - 5 }}…</li>
+              <li>
+                {{ 'settings.import.more' | transloco: { count: summary.errors.length - 5 } }}
+              </li>
             }
           </ul>
         }
@@ -113,21 +136,18 @@
     <div class="card__heading">
       <mat-icon class="card__icon" aria-hidden="true">delete_sweep</mat-icon>
       <div>
-        <h2 id="data-title" class="card__title">Dados</h2>
-        <p class="card__text">
-          Seus dados ficam apenas neste navegador. Limpar remove todas as transações e orçamentos e
-          mantém as categorias padrão. Exporte um CSV antes se quiser guardar uma cópia.
-        </p>
+        <h2 id="data-title" class="card__title">{{ 'settings.data.title' | transloco }}</h2>
+        <p class="card__text">{{ 'settings.data.text' | transloco }}</p>
       </div>
     </div>
     <div class="card__actions">
       <button mat-flat-button type="button" class="danger" (click)="clearData()">
         <mat-icon>delete_forever</mat-icon>
-        Limpar dados
+        {{ 'settings.data.clear' | transloco }}
       </button>
       <button mat-stroked-button type="button" (click)="restoreDemo()">
         <mat-icon>restart_alt</mat-icon>
-        Restaurar dados de demonstração
+        {{ 'settings.data.restore' | transloco }}
       </button>
     </div>
   </section>
