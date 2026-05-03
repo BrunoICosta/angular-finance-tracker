@@ -4,6 +4,7 @@ import { RouterTestingHarness } from '@angular/router/testing';
 import { appConfig } from './app.config';
 import { FinanceRepository } from './core/storage/finance.repository';
 import { InMemoryFinanceRepository } from './core/storage/in-memory-finance.repository';
+import { provideI18nTesting } from '../testing/i18n.testing';
 
 describe('AppComponent', () => {
   beforeEach(() => {
@@ -12,6 +13,7 @@ describe('AppComponent', () => {
         provideZonelessChangeDetection(),
         ...appConfig.providers,
         { provide: FinanceRepository, useValue: new InMemoryFinanceRepository() },
+        provideI18nTesting(),
       ],
     });
   });

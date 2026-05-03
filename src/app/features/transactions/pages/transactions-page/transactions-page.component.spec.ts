@@ -1,6 +1,4 @@
-import { registerLocaleData } from '@angular/common';
-import localePt from '@angular/common/locales/pt';
-import { LOCALE_ID, provideZonelessChangeDetection } from '@angular/core';
+import { provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DEFAULT_CATEGORIES } from '../../../../core/data/default-categories';
 import { FINANCE_DATA_VERSION, Transaction } from '../../../../core/models';
@@ -8,7 +6,8 @@ import { FinanceStore } from '../../../../core/state/finance.store';
 import { SelectedMonthStore } from '../../../../core/state/selected-month.store';
 import { FinanceRepository } from '../../../../core/storage/finance.repository';
 import { InMemoryFinanceRepository } from '../../../../core/storage/in-memory-finance.repository';
-import { providePtBrPaginator } from '../../../../shared/i18n/pt-br-paginator-intl';
+import { provideTranslatedPaginator } from '../../../../shared/i18n/translated-paginator-intl';
+import { LanguageService } from '../../../../core/i18n/language.service';
 import { TransactionsPageComponent } from './transactions-page.component';
 
 function makeTransactions(count: number): Transaction[] {
@@ -22,19 +21,18 @@ function makeTransactions(count: number): Transaction[] {
     createdAt: '2026-04-01T10:00:00.000Z',
   }));
 }
+import { provideI18nTesting } from '../../../../../testing/i18n.testing';
 
 describe('TransactionsPageComponent', () => {
   let fixture: ComponentFixture<TransactionsPageComponent>;
-
-  beforeAll(() => registerLocaleData(localePt, 'pt-BR'));
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TransactionsPageComponent],
       providers: [
         provideZonelessChangeDetection(),
-        providePtBrPaginator(),
-        { provide: LOCALE_ID, useValue: 'pt-BR' },
+        provideTranslatedPaginator(),
+        provideI18nTesting(),
         {
           provide: FinanceRepository,
           useValue: new InMemoryFinanceRepository({
@@ -115,5 +113,20 @@ describe('TransactionsPageComponent', () => {
     expect(element().querySelector('.mat-mdc-paginator-range-label')?.textContent).toContain(
       '11–20 de 20',
     );
+  });
+
+  it('renders in English with translated labels, dates and paginator', async () => {
+    await TestBed.inject(LanguageService).use('en');
+    await fixture.whenStable();
+
+    expect(element().querySelector('h1')?.textContent).toContain('Transactions');
+    expect(element().querySelector('#results-title')?.textContent).toContain('23 transactions');
+    expect(element().querySelector('.mat-mdc-paginator-range-label')?.textContent).toContain(
+      '1–10 of 23',
+    );
+    expect(element().querySelector('th')?.textContent).toContain('Date');
+    // en-US short date (M/d/yy) and BRL with the English number format.
+    expect(element().textContent).toContain('4/23/26');
+    expect(element().textContent).toContain('R$10.22');
   });
 });

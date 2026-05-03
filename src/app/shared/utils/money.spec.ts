@@ -11,6 +11,7 @@ describe('money utils', () => {
     // Intl uses a non-breaking space between the symbol and the value.
     expect(formatBrl(123456).replace(/\s/g, ' ')).toBe('R$ 1.234,56');
     expect(formatBrl(-500).replace(/\s/g, ' ')).toBe('-R$ 5,00');
+    expect(formatBrl(123456, 'en-US')).toBe('R$1,234.56');
   });
 
   describe('parseAmount', () => {

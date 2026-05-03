@@ -1,20 +1,17 @@
-import { registerLocaleData } from '@angular/common';
-import localePt from '@angular/common/locales/pt';
-import { LOCALE_ID, provideZonelessChangeDetection } from '@angular/core';
+import { provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SelectedMonthStore } from '../../../core/state/selected-month.store';
 import { MonthNavigatorComponent } from './month-navigator.component';
+import { provideI18nTesting } from '../../../../testing/i18n.testing';
 
 describe('MonthNavigatorComponent', () => {
   let fixture: ComponentFixture<MonthNavigatorComponent>;
   let months: SelectedMonthStore;
 
-  beforeAll(() => registerLocaleData(localePt, 'pt-BR'));
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MonthNavigatorComponent],
-      providers: [provideZonelessChangeDetection(), { provide: LOCALE_ID, useValue: 'pt-BR' }],
+      providers: [provideZonelessChangeDetection(), provideI18nTesting()],
     }).compileComponents();
     months = TestBed.inject(SelectedMonthStore);
     months.select('2026-01');

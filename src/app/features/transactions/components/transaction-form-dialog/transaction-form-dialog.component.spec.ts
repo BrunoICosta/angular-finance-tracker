@@ -1,6 +1,4 @@
-import { registerLocaleData } from '@angular/common';
-import localePt from '@angular/common/locales/pt';
-import { LOCALE_ID, provideZonelessChangeDetection } from '@angular/core';
+import { provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DEFAULT_CATEGORIES } from '../../../../core/data/default-categories';
@@ -12,13 +10,12 @@ import {
   TransactionFormDialogComponent,
   TransactionFormDialogData,
 } from './transaction-form-dialog.component';
+import { provideI18nTesting } from '../../../../../testing/i18n.testing';
 
 describe('TransactionFormDialogComponent', () => {
   let fixture: ComponentFixture<TransactionFormDialogComponent>;
   let component: TransactionFormDialogComponent;
   let dialogRef: jasmine.SpyObj<MatDialogRef<TransactionFormDialogComponent>>;
-
-  beforeAll(() => registerLocaleData(localePt, 'pt-BR'));
 
   async function create(data: TransactionFormDialogData | null = null): Promise<void> {
     dialogRef = jasmine.createSpyObj<MatDialogRef<TransactionFormDialogComponent>>('MatDialogRef', [
@@ -28,7 +25,7 @@ describe('TransactionFormDialogComponent', () => {
       imports: [TransactionFormDialogComponent],
       providers: [
         provideZonelessChangeDetection(),
-        { provide: LOCALE_ID, useValue: 'pt-BR' },
+        provideI18nTesting(),
         { provide: MatDialogRef, useValue: dialogRef },
         { provide: MAT_DIALOG_DATA, useValue: data },
         {

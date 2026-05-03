@@ -1,22 +1,15 @@
-import { registerLocaleData } from '@angular/common';
-import localePt from '@angular/common/locales/pt';
-import { LOCALE_ID, provideZonelessChangeDetection } from '@angular/core';
+import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrlPipe } from './brl.pipe';
+import { provideI18nTesting } from '../../../testing/i18n.testing';
 
 describe('BrlPipe', () => {
   let pipe: BrlPipe;
   const normalize = (text: string): string => text.replace(/\s/g, ' ');
 
-  beforeAll(() => registerLocaleData(localePt, 'pt-BR'));
-
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        provideZonelessChangeDetection(),
-        BrlPipe,
-        { provide: LOCALE_ID, useValue: 'pt-BR' },
-      ],
+      providers: [provideZonelessChangeDetection(), BrlPipe, provideI18nTesting()],
     });
     pipe = TestBed.inject(BrlPipe);
   });

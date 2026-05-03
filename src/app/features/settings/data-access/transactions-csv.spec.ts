@@ -110,4 +110,35 @@ describe('transactions csv', () => {
     expect(parseDate('31/04/2026')).toBeNull();
     expect(parseDate('April 1')).toBeNull();
   });
+
+  it('exports in the English format when asked', () => {
+    const transactions: Transaction[] = [
+      {
+        id: '1',
+        description: 'Groceries',
+        amountCents: 123456,
+        date: '2026-04-10',
+        type: 'expense',
+        categoryId: 'food',
+        createdAt: '2026-04-10T10:00:00.000Z',
+      },
+    ];
+    const csv = transactionsToCsv(transactions, categoryById, 'en');
+    expect(csv.split('\r\n')).toEqual([
+      'date,description,amount,type,category,notes',
+      '2026-04-10,Groceries,1234.56,expense,Alimentação,',
+    ]);
+    // ...and the importer reads it back.
+    const result = csvToTransactions(csv, categories);
+    expect(result.errors).toEqual([]);
+    expect(result.transactions[0].amountCents).toBe(123456);
+    expect(result.transactions[0].categoryId).toBe('food');
+  });
+
+  it('reports errors as translation keys', () => {
+    const result = csvToTransactions('date,description,amount\nxx,Ok,10', categories);
+    expect(result.errors).toEqual([
+      { line: 2, key: 'settings.import.errors.date', params: { value: 'xx' } },
+    ]);
+  });
 });
