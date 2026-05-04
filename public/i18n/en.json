@@ -35,8 +35,7 @@
     "enableDark": "Switch to dark theme"
   },
   "language": {
-    "label": "Language: {{language}}. Change language",
-    "change": "Change language"
+    "group": "Language"
   },
   "common": {
     "ok": "OK",

@@ -30,19 +30,7 @@
         </mat-button-toggle>
       </mat-button-toggle-group>
 
-      <mat-button-toggle-group
-        class="language-toggle"
-        hideSingleSelectionIndicator
-        [attr.aria-label]="'settings.appearance.language' | transloco"
-        [value]="languages.lang()"
-        (change)="setLanguage($event.value)"
-      >
-        @for (language of languages.languages; track language.code) {
-          <mat-button-toggle [value]="language.code" [attr.lang]="language.code">
-            {{ language.label }}
-          </mat-button-toggle>
-        }
-      </mat-button-toggle-group>
+      <app-language-switcher />
     </div>
   </section>
 

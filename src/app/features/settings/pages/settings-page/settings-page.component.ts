@@ -4,12 +4,12 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { AppLang } from '../../../../core/i18n/language';
 import { LanguageService } from '../../../../core/i18n/language.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { Theme, ThemeService } from '../../../../core/services/theme.service';
 import { FinanceStore } from '../../../../core/state/finance.store';
 import { ConfirmDialogService } from '../../../../shared/components/confirm-dialog/confirm-dialog.service';
+import { LanguageSwitcherComponent } from '../../../../shared/components/language-switcher/language-switcher.component';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { TranslatedText, plural } from '../../../../shared/i18n/translated-text';
 import { toIsoDate } from '../../../../shared/utils/month';
@@ -40,6 +40,7 @@ export interface ImportSummary {
     MatIconModule,
     MatProgressSpinnerModule,
     PageHeaderComponent,
+    LanguageSwitcherComponent,
     TranslocoPipe,
   ],
   templateUrl: './settings-page.component.html',
@@ -82,10 +83,6 @@ export class SettingsPageComponent {
 
   protected setTheme(theme: Theme): void {
     this.theme.set(theme);
-  }
-
-  protected setLanguage(lang: AppLang): void {
-    void this.languages.use(lang);
   }
 
   protected exportCsv(): void {

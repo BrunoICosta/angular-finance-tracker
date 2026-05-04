@@ -19,31 +19,49 @@ describe('LanguageSwitcherComponent', () => {
 
   afterEach(() => localStorage.removeItem(LANG_STORAGE_KEY));
 
-  const trigger = (): HTMLButtonElement =>
-    (fixture.nativeElement as HTMLElement).querySelector('button') as HTMLButtonElement;
+  const element = (): HTMLElement => fixture.nativeElement as HTMLElement;
+  const group = (): HTMLElement => element().querySelector('[role="radiogroup"]') as HTMLElement;
+  /** Finds an option by role and accessible name, like a screen reader would. */
+  const option = (name: string): HTMLButtonElement =>
+    [...element().querySelectorAll<HTMLButtonElement>('[role="radio"]')].find(
+      (radio) => radio.getAttribute('aria-label') === name,
+    ) as HTMLButtonElement;
 
-  it('shows the current language in the label', () => {
-    expect(trigger().textContent).toContain('PT');
-    expect(trigger().getAttribute('aria-label')).toBe('Idioma: Português (Brasil). Alterar idioma');
+  it('is a labelled radio group with one flag per language, named in its own language', () => {
+    expect(group().getAttribute('aria-label')).toBe('Idioma');
+    const portuguese = option('Português (Brasil)');
+    const english = option('English');
+    expect(portuguese.getAttribute('lang')).toBe('pt-BR');
+    expect(english.getAttribute('lang')).toBe('en');
+    expect(portuguese.querySelector('svg')?.getAttribute('aria-hidden')).toBe('true');
   });
 
-  it('switches the language from the menu and updates its own labels', async () => {
-    trigger().click();
-    await fixture.whenStable();
+  it('marks the current language as checked and keeps only it in the tab order', () => {
+    expect(option('Português (Brasil)').getAttribute('aria-checked')).toBe('true');
+    expect(option('English').getAttribute('aria-checked')).toBe('false');
+    expect(option('Português (Brasil)').tabIndex).toBe(0);
+    expect(option('English').tabIndex).toBe(-1);
+  });
 
-    const options = [...document.querySelectorAll<HTMLButtonElement>('[role="menuitemradio"]')];
-    expect(options.length).toBe(2);
-    expect(options[0].textContent).toContain('Português (Brasil)');
-    expect(options[1].textContent).toContain('English');
-    expect(options[0].getAttribute('aria-checked')).toBe('true');
-
-    options[1].click();
+  it('switches and persists the language on click', async () => {
+    option('English').click();
     await new Promise((resolve) => setTimeout(resolve));
     await fixture.whenStable();
 
     expect(TestBed.inject(LanguageService).lang()).toBe('en');
     expect(localStorage.getItem(LANG_STORAGE_KEY)).toBe('en');
-    expect(trigger().textContent).toContain('EN');
-    expect(trigger().getAttribute('aria-label')).toBe('Language: English. Change language');
+    expect(option('English').getAttribute('aria-checked')).toBe('true');
+    expect(group().getAttribute('aria-label')).toBe('Language');
+  });
+
+  it('moves the selection with the arrow keys', async () => {
+    option('Português (Brasil)').dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }),
+    );
+    await new Promise((resolve) => setTimeout(resolve));
+    await fixture.whenStable();
+
+    expect(TestBed.inject(LanguageService).lang()).toBe('en');
+    expect(document.activeElement).toBe(option('English'));
   });
 });

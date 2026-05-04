@@ -35,8 +35,7 @@
     "enableDark": "Ativar tema escuro"
   },
   "language": {
-    "label": "Idioma: {{language}}. Alterar idioma",
-    "change": "Alterar idioma"
+    "group": "Idioma"
   },
   "common": {
     "ok": "OK",
