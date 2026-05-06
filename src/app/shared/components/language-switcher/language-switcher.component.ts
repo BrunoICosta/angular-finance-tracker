@@ -13,11 +13,7 @@ import { FlagIconComponent } from '../flag-icon/flag-icon.component';
   selector: 'app-language-switcher',
   imports: [FlagIconComponent, MatTooltipModule, TranslocoPipe],
   template: `
-    <div
-      class="group"
-      role="radiogroup"
-      [attr.aria-label]="'language.group' | transloco"
-    >
+    <div class="group" role="radiogroup" [attr.aria-label]="'language.group' | transloco">
       @for (language of languages.languages; track language.code) {
         @let selected = language.code === languages.lang();
         <button
