@@ -4,7 +4,7 @@
 
 Aplicação de finanças pessoais feita em **Angular 20** com **Angular Material**, **Signals** e **Chart.js**. Registre receitas e despesas, organize tudo em categorias com cores e ícones, defina orçamentos mensais por categoria e acompanhe o mês em um painel com saldo, alertas de orçamento e gráficos. Os dados ficam no `localStorage` do navegador, atrás de uma camada de repositório que pode ser trocada por uma API sem mexer nas telas. Na primeira visita, o app gera dados de demonstração para você explorar.
 
-**Demo:** https://brunoicosta.github.io/angular-finance-tracker/
+**Demo:** https://portfolio.brunoisaac.dev/angular-finance-tracker/
 
 ![Visão geral do app com saldo do mês, despesas por categoria e receitas x despesas](docs/screenshot.png)
 
@@ -35,7 +35,7 @@ Aplicação de finanças pessoais feita em **Angular 20** com **Angular Material
 | Linguagem    | TypeScript 5.9 (`strict`)                                          |
 | Testes       | Karma 6.4 + Jasmine 5.9 (Chrome Headless)                          |
 | Qualidade    | ESLint 9 + angular-eslint 20.7, Prettier 3.8                       |
-| Build/Deploy | Angular CLI 20.3 (esbuild), GitHub Actions, GitHub Pages           |
+| Build/Deploy | Angular CLI 20.3 (esbuild), GitHub Actions, Cloudflare (Workers static assets) |
 
 ## Arquitetura e decisões
 
@@ -113,12 +113,15 @@ npm run format       # Prettier
 npm run build        # build de produção em dist/
 ```
 
-Para gerar o build do GitHub Pages: `npx ng build --base-href /angular-finance-tracker/`.
+Para gerar o build publicado (com base `/angular-finance-tracker/`): `npm run build:cf` (saída em `dist/angular-finance-tracker/browser`).
 
-## CI e deploy
+## CI
 
-- `.github/workflows/ci.yml`: em push e PR para `main`, roda `npm ci`, lint, testes em Chrome Headless e build.
-- `.github/workflows/deploy.yml`: em push para `main` (ou manualmente), gera o build com `--base-href`, copia `index.html` para `404.html` (para as rotas da SPA funcionarem) e publica no GitHub Pages.
+`.github/workflows/ci.yml`: em push e PR para `main`, roda `npm ci`, lint, verificação de formatação, testes em Chrome Headless e build.
+
+## Deploy
+
+Publicado na Cloudflare (Workers static assets) em https://portfolio.brunoisaac.dev/angular-finance-tracker/ pelo pipeline do repositório [portfolio](https://github.com/BrunoICosta/portfolio). O pipeline roda `npm run build:cf` e copia `dist/angular-finance-tracker/browser` para `/angular-finance-tracker/`. O fallback de SPA (qualquer rota servindo o `index.html` do app) fica no Worker.
 
 ## Próximos passos
 

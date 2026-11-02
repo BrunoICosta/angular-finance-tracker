@@ -4,7 +4,7 @@
 
 A personal finance app built with **Angular 20**, **Angular Material**, **Signals** and **Chart.js**. Record income and expenses, organize them in categories with colors and icons, set monthly budgets per category and follow the month on a dashboard with balance, budget alerts and charts. Data is kept in the browser's `localStorage`, behind a repository abstraction that can be swapped for an API without touching the screens. The first visit seeds demo data so you can explore right away.
 
-**Demo:** https://brunoicosta.github.io/angular-finance-tracker/
+**Demo:** https://portfolio.brunoisaac.dev/angular-finance-tracker/
 
 ![Dashboard with the month balance, expenses by category and income vs expenses](docs/screenshot.png)
 
@@ -21,7 +21,7 @@ A personal finance app built with **Angular 20**, **Angular Material**, **Signal
 
 ## Stack
 
-Angular 20.3 (standalone, zoneless, Signals, new control flow) · Angular Material/CDK 20.2 (Material 3) · @jsverse/transloco 8.2 · Chart.js 4.5 + ng2-charts 9 · TypeScript 5.9 (strict) · Karma + Jasmine · ESLint (angular-eslint) + Prettier · GitHub Actions + GitHub Pages.
+Angular 20.3 (standalone, zoneless, Signals, new control flow) · Angular Material/CDK 20.2 (Material 3) · @jsverse/transloco 8.2 · Chart.js 4.5 + ng2-charts 9 · TypeScript 5.9 (strict) · Karma + Jasmine · ESLint (angular-eslint) + Prettier · GitHub Actions (CI) · Cloudflare (Workers static assets).
 
 ## Architecture highlights
 
@@ -39,7 +39,12 @@ npm start          # http://localhost:4200
 npm run test:ci    # unit tests in Chrome Headless
 npm run lint
 npm run build
+npm run build:cf   # deploy build with the /angular-finance-tracker/ base
 ```
+
+## Deploy
+
+Published on Cloudflare (Workers static assets) at https://portfolio.brunoisaac.dev/angular-finance-tracker/ by the pipeline of the [portfolio](https://github.com/BrunoICosta/portfolio) repository. It runs `npm run build:cf` and serves `dist/angular-finance-tracker/browser` under `/angular-finance-tracker/`; the SPA fallback is handled by the Worker.
 
 ## Author
 

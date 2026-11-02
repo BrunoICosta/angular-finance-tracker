@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 /**
  * Loads `public/i18n/<lang>.json` for the root and `public/i18n/<scope>/<lang>.json` for the
- * lazy feature scopes. The path is relative, so it works under the GitHub Pages base href.
+ * lazy feature scopes. The path is relative, so it works under the `/angular-finance-tracker/` base href.
  */
 @Injectable({ providedIn: 'root' })
 export class TranslocoHttpLoader implements TranslocoLoader {
