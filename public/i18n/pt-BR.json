@@ -48,7 +48,7 @@
     "undo": "Desfazer",
     "noCategory": "Sem categoria",
     "actionsFor": "Ações para {{name}}",
-    "amountPlaceholder": "0,00",
+    "amountPlaceholder": "R$ 0,00",
     "datePlaceholder": "dd/mm/aaaa",
     "type": {
       "income": "Receita",

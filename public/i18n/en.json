@@ -48,7 +48,7 @@
     "undo": "Undo",
     "noCategory": "No category",
     "actionsFor": "Actions for {{name}}",
-    "amountPlaceholder": "0.00",
+    "amountPlaceholder": "R$0.00",
     "datePlaceholder": "mm/dd/yyyy",
     "type": {
       "income": "Income",

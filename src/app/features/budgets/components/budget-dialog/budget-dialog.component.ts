@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { TranslocoPipe, provideTranslocoScope } from '@jsverse/transloco';
 import { Category } from '../../../../core/models';
 import { CategoryIconComponent } from '../../../../shared/components/category-icon/category-icon.component';
+import { CurrencyInputDirective } from '../../../../shared/directives/currency-input.directive';
 import { BrlPipe } from '../../../../shared/pipes/brl.pipe';
 import { fromCents, toCents } from '../../../../shared/utils/money';
 
@@ -32,6 +33,7 @@ export interface BudgetDialogResult {
     MatButtonModule,
     CategoryIconComponent,
     BrlPipe,
+    CurrencyInputDirective,
     TranslocoPipe,
   ],
   providers: [provideTranslocoScope('budgets')],
@@ -45,13 +47,9 @@ export interface BudgetDialogResult {
         <p class="intro">{{ 'budgets.dialog.intro' | transloco }}</p>
         <mat-form-field appearance="outline" floatLabel="always" class="field">
           <mat-label>{{ 'budgets.dialog.limit' | transloco }}</mat-label>
-          <span matTextPrefix>R$&nbsp;</span>
           <input
             matInput
-            type="number"
-            inputmode="decimal"
-            step="0.01"
-            min="0.01"
+            appCurrencyInput
             [placeholder]="'common.amountPlaceholder' | transloco"
             formControlName="limit"
             cdkFocusInitial

@@ -35,13 +35,9 @@
     <div class="row">
       <mat-form-field appearance="outline" floatLabel="always">
         <mat-label>{{ 'transactions.form.amount' | transloco }}</mat-label>
-        <span matTextPrefix>R$&nbsp;</span>
         <input
           matInput
-          type="number"
-          inputmode="decimal"
-          step="0.01"
-          min="0.01"
+          appCurrencyInput
           formControlName="amount"
           [placeholder]="'transactions.form.amountPlaceholder' | transloco"
         />

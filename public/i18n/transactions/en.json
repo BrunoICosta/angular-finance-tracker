@@ -39,7 +39,7 @@
     "type": "Transaction type",
     "description": "Description",
     "amount": "Amount",
-    "amountPlaceholder": "0.00",
+    "amountPlaceholder": "R$0.00",
     "date": "Date",
     "category": "Category",
     "notes": "Notes (optional)",

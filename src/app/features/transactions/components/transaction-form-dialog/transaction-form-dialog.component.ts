@@ -21,6 +21,7 @@ import { Transaction, TransactionDraft, TransactionType } from '../../../../core
 import { FinanceStore } from '../../../../core/state/finance.store';
 import { provideLocalizedDateAdapter } from '../../../../shared/adapters/localized-date.adapter';
 import { CategoryIconComponent } from '../../../../shared/components/category-icon/category-icon.component';
+import { CurrencyInputDirective } from '../../../../shared/directives/currency-input.directive';
 import { fromCents, toCents } from '../../../../shared/utils/money';
 import { fromIsoDate, toIsoDate } from '../../../../shared/utils/month';
 
@@ -53,6 +54,7 @@ function notBlank(control: AbstractControl<string>): ValidationErrors | null {
     MatButtonToggleModule,
     MatIconModule,
     CategoryIconComponent,
+    CurrencyInputDirective,
     TranslocoPipe,
   ],
   // Dialogs are created outside the route injector, so they provide their own scope.
